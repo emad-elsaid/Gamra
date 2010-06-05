@@ -3,10 +3,10 @@ Created on Jun 4, 2010
 
 @author: blaze
 '''
-from wx import *
+import wx
 from AboutBox import AboutBox
 
-class MainFrame(Frame):
+class MainFrame(wx.Frame):
     
     def __init__(self,parent=None,id=-1, title="Gamra", pos = wx.DefaultPosition,
                  size = wx.DefaultSize, style = wx.DEFAULT_FRAME_STYLE):
@@ -17,10 +17,10 @@ class MainFrame(Frame):
         self.About = AboutBox()
 
         file_menu = wx.Menu()
-        file_menu.Append(ID_EXIT,"E&xit", "Terminate the program")
+        file_menu.Append(wx.ID_EXIT,"E&xit", "Terminate the program")
 
         help_menu = wx.Menu()
-        help_menu.Append(ID_ABOUT,"&About","More information about this program")
+        help_menu.Append(wx.ID_ABOUT,"&About","More information about this program")
         
         menuBar = wx.MenuBar()
         menuBar.Append(file_menu, "&File")
@@ -28,8 +28,8 @@ class MainFrame(Frame):
         self.MenuBar = menuBar
                     
         #connecting functions with actions
-        EVT_MENU(self, ID_EXIT, self.OnExit)
-        EVT_MENU(self, ID_ABOUT, self.OnAbout)
+        wx.EVT_MENU(self, wx.ID_EXIT, self.OnExit)
+        wx.EVT_MENU(self, wx.ID_ABOUT, self.OnAbout)
         
     def OnExit(self, event):
         self.Close(True)

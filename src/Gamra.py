@@ -5,10 +5,10 @@ Created on Jun 3, 2010
 @author: blaze
 '''
 
-from wx import App
+import wx
 from MainFrame import MainFrame
 
-class Gamra(App):
+class Gamra(wx.App):
     def OnInit(self):
         self.AppName = "Gamra"
         self.VendorName = "Schoolar Projects"

@@ -3,7 +3,7 @@ Created on Jun 4, 2010
 
 @author: blaze
 '''
-from wx import *
+import wx
 
 class AboutBox:
     '''
