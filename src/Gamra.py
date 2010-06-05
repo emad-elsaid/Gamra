@@ -1,3 +1,4 @@
+#!/usr/bin/python
 '''
 Created on Jun 3, 2010
 
@@ -7,11 +8,11 @@ Created on Jun 3, 2010
 from wx import App
 from MainFrame import MainFrame
 
-class Firepy(App):
+class Gamra(App):
     def OnInit(self):
-        self.AppName = "Firepy"
+        self.AppName = "Gamra"
         self.VendorName = "Schoolar Projects"
-        self.Version = "0"
+        self.Version = "0.1"
         
         frame = MainFrame()
         frame.Show(True)
@@ -20,5 +21,5 @@ class Firepy(App):
 
 
 if __name__ == '__main__':
-    firepy_obj = Firepy()
-    firepy_obj.MainLoop()
+    gamra_obj = Gamra()
+    gamra_obj.MainLoop()

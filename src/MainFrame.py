@@ -8,12 +8,13 @@ from AboutBox import AboutBox
 
 class MainFrame(Frame):
     
-    def __init__(self,parent=None,id=-1, title="Firepy", pos = wx.DefaultPosition,
+    def __init__(self,parent=None,id=-1, title="Gamra", pos = wx.DefaultPosition,
                  size = wx.DefaultSize, style = wx.DEFAULT_FRAME_STYLE):
         
         wx.Frame.__init__(self, parent, id, title,pos, size)
         
         self.CreateStatusBar()
+        self.About = AboutBox()
 
         file_menu = wx.Menu()
         file_menu.Append(ID_EXIT,"E&xit", "Terminate the program")
@@ -25,13 +26,10 @@ class MainFrame(Frame):
         menuBar.Append(file_menu, "&File")
         menuBar.Append(help_menu, "&Help")
         self.MenuBar = menuBar
-        
-            
+                    
         #connecting functions with actions
         EVT_MENU(self, ID_EXIT, self.OnExit)
         EVT_MENU(self, ID_ABOUT, self.OnAbout)
-        
-        self.About = AboutBox()
         
     def OnExit(self, event):
         self.Close(True)

@@ -14,12 +14,12 @@ class AboutBox:
         self.info = wx.AboutDialogInfo()
         
         self.info.Copyright = "All rights reserved for Schoolar Group"
-        self.info.Description = "Firepy is a program aim to help webdesigners to \
+        self.info.Description = "Gamra is a program aim to help webdesigners to \
 create beautiful website using raster and vector images"
         self.info.AddDeveloper("Emad Elsaid <Blazeeboy@gmail.com>")
-        self.info.Version = '1.0'
+        self.info.Version = '0.1'
         self.info.Icon = wx.Icon('icon256.png',wx.BITMAP_TYPE_PNG)
-        self.info.WebSite = "http://www.firepy.com"
+        self.info.WebSite = "http://www.Gamra.com"
         
         self.info.SetLicence('''
         This program is free software; you can redistribute it and/or modify
