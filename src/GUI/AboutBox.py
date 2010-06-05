@@ -4,6 +4,7 @@ Created on Jun 4, 2010
 @author: blaze
 '''
 import wx
+import os.path
 
 class AboutBox:
     '''
@@ -16,9 +17,12 @@ class AboutBox:
         self.info.Copyright = "All rights reserved for Schoolar Group"
         self.info.Description = "Gamra is a program aim to help webdesigners to \
 create beautiful website using raster and vector images"
+
         self.info.AddDeveloper("Emad Elsaid <Blazeeboy@gmail.com>")
+        self.info.AddDeveloper("Ahmed Ibrahim <the_master_of_ninjutsu2@yahoo.com>")
+        
         self.info.Version = '0.1'
-        self.info.Icon = wx.Icon('icon256.png',wx.BITMAP_TYPE_PNG)
+        self.info.Icon = wx.Icon(os.path.normpath('GUI/icon256.png'),wx.BITMAP_TYPE_PNG)
         self.info.WebSite = "http://www.Gamra.com"
         
         self.info.SetLicence('''

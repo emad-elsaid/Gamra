@@ -6,7 +6,8 @@ Created on Jun 3, 2010
 '''
 
 import wx
-from MainFrame import MainFrame
+from GUI.MainFrame import MainFrame
+
 
 class Gamra(wx.App):
     def OnInit(self):
