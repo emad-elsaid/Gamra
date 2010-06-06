@@ -23,7 +23,7 @@ class Tool():
     def OnSelectionSubtracted(self):
         pass
      
-class EditingTool():
+class EditingTool(Tool):
     '''
     Object editing tool parent like
     moving, rotating, scale, skew, shear...etc
@@ -32,7 +32,7 @@ class EditingTool():
     def __init__(self):
         pass
     
-class VectorTool():
+class VectorTool(Tool):
     '''
     vector adding, editing, drawing like
     pen tool, biezer curves, lines, 
@@ -41,7 +41,7 @@ class VectorTool():
     def __init__(self):
         pass
         
-class BitmapTool():
+class BitmapTool(Tool):
     '''
     bitmap editing tools like:
     rectangle, circle selections, burn, dodge

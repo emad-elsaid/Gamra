@@ -17,7 +17,7 @@ class Gamra(wx.App):
         
         frame = MainFrame()
         frame.Show(True)
-        self.SetTopWindow(frame)
+        self.SetTopWindow = frame
         return True
 
 

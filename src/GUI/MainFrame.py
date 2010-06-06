@@ -4,6 +4,7 @@ Created on Jun 4, 2010
 @author: blaze
 '''
 import wx
+import os
 from AboutBox import AboutBox
 
 class MainFrame(wx.Frame):
@@ -15,6 +16,7 @@ class MainFrame(wx.Frame):
         
         self.CreateStatusBar()
         self.About = AboutBox()
+        self.Icon = wx.Icon(os.path.normpath("GUI/icon256.png"), wx.BITMAP_TYPE_PNG)
 
         file_menu = wx.Menu()
         file_menu.Append(wx.ID_EXIT,"E&xit", "Terminate the program")
