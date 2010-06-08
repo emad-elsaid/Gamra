@@ -19,10 +19,10 @@ class AboutBox:
 create beautiful website using raster and vector images"
 
         self.info.AddDeveloper("Emad Elsaid <Blazeeboy@gmail.com>")
-        self.info.AddDeveloper("Ahmed Ibrahim <the_master_of_ninjutsu2@yahoo.com>")
+        self.info.AddDeveloper("Ahmed Ibrahim <mr.ahmed_i@live.com>")
         
         self.info.Version = '0.1'
-        self.info.Icon = wx.Icon(os.path.normpath('GUI/icon256.png'),wx.BITMAP_TYPE_PNG)
+        self.info.Icon = wx.Icon(os.path.normpath('icons/icon256.png'),wx.BITMAP_TYPE_PNG)
         self.info.WebSite = "http://www.Gamra.com"
         
         self.info.SetLicence('''
