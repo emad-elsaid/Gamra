@@ -15,7 +15,7 @@ class Gamra(wx.App):
         self.VendorName = "Schoolar Projects"
         self.Version = "0.1"
         
-        frame = MainFrame()
+        frame = MainFrame(size=wx.Size(1000,600))
         frame.Show(True)
         self.SetTopWindow = frame
         return True
