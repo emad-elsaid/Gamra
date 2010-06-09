@@ -50,8 +50,10 @@ class MainFrame(wx.Frame):
         
         tb = wx.ToolBar(self)
         tb.height = 10
-        tb.AddTool(-1, wx.Bitmap("icons/select.png"), wx.Bitmap("icons/select.png"))
-        box.Add(tb, 2)
+        tb.AddTool(-1, wx.Bitmap( os.path.normpath("icons/select.png")), wx.Bitmap( os.path.normpath("icons/select.png") ))
+        #The second parameter to make the vertical resizing factor to Zero and 
+        #make Horizontal factor resizable 
+        box.Add(tb, 0, wx.EXPAND | wx.ALL)
         
         #====== TODO: the properties table
         panel2 = wx.Panel(self)
