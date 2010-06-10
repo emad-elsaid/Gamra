@@ -6,7 +6,9 @@ Created on Jun 4, 2010
 import wx
 import os
 import Canvas
-from AboutBox import AboutBox
+import AboutBox
+from ToolBar import ToolBar
+
 
 class MainFrame(wx.Frame):
     
@@ -19,7 +21,7 @@ class MainFrame(wx.Frame):
         self.CreateStatusBar()
         
         #============= Creating About Box
-        self.About = AboutBox()
+        self.About = AboutBox.AboutBox()
         
         #============= Setting Frame Icon
         self.Icon = wx.Icon(os.path.normpath("icons/icon256.png"), wx.BITMAP_TYPE_PNG)
@@ -43,14 +45,13 @@ class MainFrame(wx.Frame):
         self.SetAutoLayout(True)
         self.SetSizer(box)
         self.Layout()
+        
         #=============== Creating Canvas =================
         canvas = Canvas.Canvas( self, size=wx.Size(1000,1000) )  
-        box.Add(canvas, 20, wx.EXPAND)     
+        box.Add(canvas, 20, wx.EXPAND)
+          
         #=============== Creating Toolbar =================
-        
-        tb = wx.ToolBar(self)
-        tb.height = 10
-        tb.AddTool(-1, wx.Bitmap( os.path.normpath("icons/select.png")), wx.Bitmap( os.path.normpath("icons/select.png") ))
+        tb = ToolBar.ToolBar(self)
         #The second parameter to make the vertical resizing factor to Zero and 
         #make Horizontal factor resizable 
         box.Add(tb, 0, wx.EXPAND | wx.ALL)
@@ -61,7 +62,6 @@ class MainFrame(wx.Frame):
         box.Add(panel2, 10, wx.EXPAND)
         
         
-
         #connecting functions with actions
         wx.EVT_MENU(self, wx.ID_EXIT, self.OnExit)
         wx.EVT_MENU(self, wx.ID_ABOUT, self.OnAbout)

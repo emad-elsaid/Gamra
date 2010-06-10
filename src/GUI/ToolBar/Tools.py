@@ -8,8 +8,10 @@ class Tool():
     '''
     the parent of all tools here
     '''
-    def __init__(self):
-        pass
+    def __init__(self, name='tool', icon='tool.png',canvas=None):
+        self.name = name
+        self.icon = icon        
+        self.canvas = canvas
     
     def Activate(self):
         pass
@@ -20,7 +22,7 @@ class Tool():
     def OnSelectionAdd(self):
         pass
     
-    def OnSelectionSubtracted(self):
+    def OnSelectionSubtract(self):
         pass
      
 class EditingTool(Tool):
@@ -28,7 +30,6 @@ class EditingTool(Tool):
     Object editing tool parent like
     moving, rotating, scale, skew, shear...etc
     '''
-
     def __init__(self):
         pass
     
@@ -48,3 +49,5 @@ class BitmapTool(Tool):
     '''
     def __init__(self):
         pass
+    
+        
