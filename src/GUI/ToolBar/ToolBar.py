@@ -32,11 +32,10 @@ class ToolBar(wx.ToolBar):
             expr ='self.editTools.append( '+tool+'.'+tool+'())'
             eval( expr )
         
-        print self.editTools
-        
-        self.AddTool(-1,
-                     wx.Bitmap( os.path.normpath("icons/select.png")), 
-                     wx.Bitmap( os.path.normpath("icons/select.png"))
+        for v in self.editTools:
+            self.AddTool(-1,
+                     wx.Bitmap( os.path.normpath("icons/"+v.icon)), 
+                     wx.Bitmap( os.path.normpath("icons/"+v.icon))
                      )
         
     def listTools(self,category):

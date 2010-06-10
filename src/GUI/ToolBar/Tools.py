@@ -31,7 +31,7 @@ class EditingTool(Tool):
     moving, rotating, scale, skew, shear...etc
     '''
     def __init__(self, name='tool', icon='tool.png',canvas=None):
-        Tool.__init__(self, name='tool', icon='tool.png',canvas=None)
+        Tool.__init__(self, name, icon,canvas)
     
 class VectorTool(Tool):
     '''
@@ -40,7 +40,7 @@ class VectorTool(Tool):
     circle, rectangle, stars...etc
     '''
     def __init__(self, name='tool', icon='tool.png',canvas=None):
-        Tool.__init__(self, name='tool', icon='tool.png',canvas=None)
+        Tool.__init__(self, name, icon,canvas)
         
 class BitmapTool(Tool):
     '''
@@ -48,6 +48,6 @@ class BitmapTool(Tool):
     rectangle, circle selections, burn, dodge
     '''
     def __init__(self, name='tool', icon='tool.png',canvas=None):
-        Tool.__init__(self, name='tool', icon='tool.png',canvas=None)
+        Tool.__init__(self, name, icon,canvas)
     
         
