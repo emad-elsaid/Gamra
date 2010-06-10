@@ -5,8 +5,8 @@ Created on Jun 10, 2010
 '''
 import os
 import wx
-from Edit import Select
-#======== importing all tools
+import Edit
+from Edit import *
 
 class ToolBar(wx.ToolBar):
     '''
@@ -25,21 +25,19 @@ class ToolBar(wx.ToolBar):
         #================================================
         #=========== loading all tools ==================
         #================================================
-        #============ Editing tools 
+        #========== Making objects of Editing tools ===== 
         self.editTools = []
-        for tool in self.listTools('Edit'):
-            #eval('from Edit import '+tool)
-            expr ='self.editTools.append( '+tool+'.'+tool+'())'
-            eval( expr )
-        
+        for tool in Edit.__all__:
+            eval( 'self.editTools.append( '+tool+'.'+tool+'())' )
+            
+        #========== Making buttons of Editing tools =====
         for v in self.editTools:
             self.AddTool(-1,
                      wx.Bitmap( os.path.normpath("icons/"+v.icon)), 
-                     wx.Bitmap( os.path.normpath("icons/"+v.icon))
+                     wx.Bitmap( os.path.normpath("icons/"+v.icon)),
+                     isToggle=True,
+                     shortHelpString = v.name,
+                     longHelpString = v.__doc__
                      )
-        
-    def listTools(self,category):
-        editingTools = os.listdir(os.path.normpath('GUI/ToolBar/'+category))
-        return [ i.split('.')[0] for i in editingTools if i.endswith('.py') and i!='__init__.py']
         
         
