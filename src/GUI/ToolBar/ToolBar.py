@@ -5,7 +5,7 @@ Created on Jun 10, 2010
 '''
 import os
 import wx
-import Edit
+from Edit import Select
 #======== importing all tools
 
 class ToolBar(wx.ToolBar):
@@ -27,12 +27,10 @@ class ToolBar(wx.ToolBar):
         #================================================
         #============ Editing tools 
         self.editTools = []
-        #for tool in self.listTools('Edit'):
-        #    expr ='self.editTools.append( Edit.'+tool+'.'+tool +'())'
-        #    eval( expr )
-        
-        obj = Edit.Select.Select()
-        self.editTools.append(obj)
+        for tool in self.listTools('Edit'):
+            #eval('from Edit import '+tool)
+            expr ='self.editTools.append( '+tool+'.'+tool+'())'
+            eval( expr )
         
         print self.editTools
         
