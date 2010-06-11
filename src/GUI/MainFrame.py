@@ -48,7 +48,7 @@ class MainFrame(wx.Frame):
         
         #=============== Creating Canvas =================
         canvas = Canvas.Canvas( self, size=wx.Size(1000,1000) )  
-        box.Add(canvas, 20, wx.EXPAND)
+        box.Add(canvas, 10, wx.EXPAND | wx.ALL)
           
         #=============== Creating Toolbar =================
         tb = ToolBar.ToolBar(self)
@@ -57,10 +57,9 @@ class MainFrame(wx.Frame):
         box.Add(tb, 0, wx.EXPAND | wx.ALL)
         
         #====== TODO: the properties table
-        panel2 = wx.Panel(self)
-        panel2.SetBackgroundColour("RED")
-        box.Add(panel2, 10, wx.EXPAND)
-        
+        panel2 = wx.Panel(self,size=(0,100))
+        panel2.SetBackgroundColour("blue")
+        box.Add(panel2, 0, wx.EXPAND | wx.ALL)
         
         #connecting functions with actions
         wx.EVT_MENU(self, wx.ID_EXIT, self.OnExit)
