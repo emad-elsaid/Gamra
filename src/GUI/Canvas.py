@@ -21,3 +21,4 @@ class Canvas(wx.ScrolledWindow):
         wx.ScrolledWindow.__init__(self, parent, id, pos)
         self.canvas = FloatCanvas( self, -1, size )
         self.SetScrollbars( 20, 20, size[0]/20, size[1]/20 )
+        self.SetBackgroundColour('white')
