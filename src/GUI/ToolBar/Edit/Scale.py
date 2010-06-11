@@ -15,3 +15,5 @@ class Scale(EditingTool):
         
     def Activate(self):
         print 'test the Scale activation'
+    def Deactivate(self):
+        print 'scale deactivated'

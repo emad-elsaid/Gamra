@@ -15,3 +15,5 @@ class Select(EditingTool):
         
     def Activate(self):
         print 'test the selection activation'
+    def Deactivate(self):
+        print 'selection deactivated'
