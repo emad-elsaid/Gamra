@@ -26,18 +26,34 @@ class ToolBar(wx.ToolBar):
         #=========== loading all tools ==================
         #================================================
         #========== Making objects of Editing tools ===== 
-        self.editTools = []
+        editTools = []
         for tool in Edit.__all__:
-            eval( 'self.editTools.append( '+tool+'.'+tool+'())' )
+            eval( 'editTools.append('+tool+'.'+tool+'())' )
             
         #========== Making buttons of Editing tools =====
-        for v in self.editTools:
-            self.AddTool(-1,
-                     wx.Bitmap( os.path.normpath("icons/"+v.icon)), 
-                     wx.Bitmap( os.path.normpath("icons/"+v.icon)),
-                     isToggle=True,
-                     shortHelpString = v.name,
-                     longHelpString = v.__doc__
+        for v in editTools:
+            tool = self.AddRadioTool(-1,
+                     bitmap = wx.Bitmap( os.path.normpath("icons/"+v.icon)), 
+                     shortHelp = v.name,
+                     longHelp = v.__doc__
                      )
+            self.Bind(wx.EVT_MENU, self.OnToolChange, tool)
+        self.AddSeparator()
         
+        #================================================
+        # Note: we have to merge all tools lists to (self.Tools)
+        #================================================
+        self.Tools = []
+        self.Tools.extend(editTools)
+        self.Tools[0].Activate()
+        self.ActiveTool = self.Tools[0]
+            
+    def OnToolChange(self,event):
         
+        #========= getting new tool
+        toolbutton = self.FindById(event.Id)
+        tool = [ i for i in self.Tools if i.name==toolbutton.ShortHelp ][0]
+        
+        self.ActiveTool.Deactivate()
+        tool.Activate()
+        self.ActiveTool = tool
