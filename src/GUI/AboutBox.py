@@ -21,7 +21,7 @@ create beautiful website using raster and vector images"
         self.info.AddDeveloper("Emad Elsaid <Blazeeboy@gmail.com>")
         self.info.AddDeveloper("Ahmed Ibrahim <mr.ahmed_i@live.com>")
         
-        self.info.Version = '0.1'
+        self.info.Version = wx.GetApp().Version
         self.info.Icon = wx.Icon(os.path.normpath('icons/icon256.png'),wx.BITMAP_TYPE_PNG)
         self.info.WebSite = "http://www.Gamra.com"
         
