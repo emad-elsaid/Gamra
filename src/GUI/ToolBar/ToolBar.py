@@ -37,7 +37,9 @@ class ToolBar(wx.ToolBar):
                      shortHelp = v.name,
                      longHelp = v.__doc__
                      )
+            tool.ClientData = v
             self.Bind(wx.EVT_MENU, self.OnToolChange, tool)
+            
         self.AddSeparator()
         
         #================================================
@@ -52,8 +54,11 @@ class ToolBar(wx.ToolBar):
         
         #========= getting new tool
         toolbutton = self.FindById(event.Id)
-        tool = [ i for i in self.Tools if i.name==toolbutton.ShortHelp ][0]
+        tool = toolbutton.ClientData
         
+        #======== Activating and Deactivating
         self.ActiveTool.Deactivate()
         tool.Activate()
+        
+        #======== Setting new Tool
         self.ActiveTool = tool
