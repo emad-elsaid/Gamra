@@ -19,11 +19,22 @@ class Tool():
     def Deactivate(self):
         pass
     
-    def OnSelectionAdd(self):
-        pass
+    def OnMouseLeftDown(self,event): event.Skip()
+    def OnMouseMiddleDown(self,event): event.Skip()
+    def OnMouseRightDown(self,event): event.Skip()
     
-    def OnSelectionSubtract(self):
-        pass
+    def OnMouseLeftUp(self,event): event.Skip()
+    def OnMouseMiddleUp(self,event): event.Skip()
+    def OnMouseRightUp(self,event): event.Skip()
+    
+    def OnMouseMove(self,event): event.Skip()
+    
+    def OnKeyDown(self,event): event.Skip()
+    def OnKeyUp(self,event): event.Skip()
+    
+    def OnWheel(self,event): event.Skip()
+    def OnPaint(self, event): event.Skip()
+    
      
 class EditingTool(Tool):
     '''
