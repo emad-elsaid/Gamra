@@ -6,13 +6,14 @@ Created on Jun 3, 2010
 '''
 
 import wx
+import os.path
 from GUI.MainFrame import MainFrame
 from GUI.Splash import Splash
 
 
 class Gamra(wx.App):
     def OnInit(self):
-        splash = Splash("icons/splash.png",3000) #obj to show splash 3sec 
+        splash = Splash(os.path.normpath("data/icons/splash.png"),3000) #obj to show splash 3sec 
         
         self.AppName = "Gamra"
         self.VendorName = "Schoolar Projects"

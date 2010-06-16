@@ -24,7 +24,7 @@ class MainFrame(wx.Frame):
         self.About = AboutBox.AboutBox()
         
         #============= Setting Frame Icon
-        self.Icon = wx.Icon(os.path.normpath("icons/icon256.png"), wx.BITMAP_TYPE_PNG)
+        self.Icon = wx.Icon(os.path.normpath("data/icons/icon256.png"), wx.BITMAP_TYPE_PNG)
         
         #============= Making Main Menu
         file_menu = wx.Menu()
