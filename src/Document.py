@@ -27,7 +27,7 @@ class Stroke:
         self.Cap = cairo.LINE_CAP_BUTT
         self.Join = cairo.LINE_JOIN_MITER
         
-    def Apply(self, context ): pass
+    def Apply(self, context, preserve=True ): pass
     def ToData(self): pass
     def FromData(self, data): pass
 
@@ -35,7 +35,7 @@ class Fill:
     def __init__(self):
         self.Rule = cairo.FILL_RULE_WINDING
         
-    def Apply(self, context ): pass
+    def Apply(self, context, preserve=True ): pass
     def ToData(self): pass
     def FromData(self, data): pass
     
@@ -80,6 +80,8 @@ class Document:
         self.MetaData = MetaData
         self.Objects = []
         self.ToolObjects = []
+        self.SelectedObjects = []
+        self.SelectedToolsObjects = []
         self.Clip = [0,0,0,0]
         self.Antialias = cairo.ANTIALIAS_DEFAULT
         
