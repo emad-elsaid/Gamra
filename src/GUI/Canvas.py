@@ -23,8 +23,15 @@ class Canvas(wx.ScrolledWindow):
         self.SetScrollbars( 20, 20, size[0]/20, size[1]/20 )
         self.SetBackgroundColour('white')
         
+        # zooming factor normal=1 ,>10=zoom-in 0<x<1=zoom-out
+        self.zoom = 1
+        # origin (0,0) is the normal, (5,6) origin x is 5 to left of x-axis
+        # and y to 6 above client area y
+        self.origin = [0,0]
+        
     def Refresh(self):
         pass
+    
     
     def GetMousePosition(self):
         pass
