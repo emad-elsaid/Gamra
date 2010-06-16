@@ -7,18 +7,34 @@ Created on Jun 14, 2010
             it contain all data structure of the Image Document, and may
             contain library structure and so.
 '''
+import cairo
 
 class Path:
+    def __init__(self):
+        self.Points = []
+        self.Closed = False
+        
     def Apply(self, context ): pass
     def ToData(self): pass
     def FromData(self, data): pass
 
 class Stroke:
+    def __init__(self):
+        self.Width = 2.0
+        self.Antialias = cairo.ANTIALIAS_DEFAULT
+        self.Dash = []
+        self.DashOffset = 0
+        self.Cap = cairo.LINE_CAP_BUTT
+        self.Join = cairo.LINE_JOIN_MITER
+        
     def Apply(self, context ): pass
     def ToData(self): pass
     def FromData(self, data): pass
 
 class Fill:
+    def __init__(self):
+        self.Rule = cairo.FILL_RULE_WINDING
+        
     def Apply(self, context ): pass
     def ToData(self): pass
     def FromData(self, data): pass
@@ -52,6 +68,7 @@ class MetaData:
         self.Created = ''
         self.Modified = ''
         self.Comment = ''
+        
     def ToData(self): pass
     def FromData(self, data): pass
     
@@ -63,6 +80,8 @@ class Document:
         self.MetaData = MetaData
         self.Objects = []
         self.ToolObjects = []
+        self.Clip = [0,0,0,0]
+        self.Antialias = cairo.ANTIALIAS_DEFAULT
         
     def Render(self): pass
     def ToData(self): pass
