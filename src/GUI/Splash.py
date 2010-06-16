@@ -4,7 +4,7 @@ Created on Jun 4, 2010
 @author: Ahmed Ghanem
 '''
 import wx
-class GamraSplash():
+class Splash():
 	#============= Creating Gamra SplashSceen
 	def __init__(self, splashName, splashTime):
 		image = wx.Image(splashName)                                                 
