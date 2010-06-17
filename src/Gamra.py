@@ -13,14 +13,14 @@ from GUI.Splash import Splash
 
 class Gamra(wx.App):
     def OnInit(self):
-        Splash("icons/splash.png",3000) #obj to show splash 3sec 
+        Splash("data/icons/splash.png",3000) #obj to show splash 3sec 
         self.AppName = "Gamra"
         self.VendorName = "Schoolar Projects"
         self.Version = "0.1"
         
-        frame = MainFrame(size=wx.Size(1000,600))
-        frame.Show(True)
-        self.SetTopWindow = frame
+        self.Frame = MainFrame(size=wx.Size(1000,600))
+        self.Frame.Show(True)
+        self.SetTopWindow = self.Frame
         return True
 
 
