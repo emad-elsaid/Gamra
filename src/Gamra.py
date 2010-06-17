@@ -13,7 +13,8 @@ from GUI.Splash import Splash
 
 class Gamra(wx.App):
     def OnInit(self):
-        Splash("data/icons/splash.png",3000) #obj to show splash 3sec 
+        #commented because it hides hte menubar if enabled
+        #Splash("data/icons/splash.png",3000) #obj to show splash 3sec 
         self.AppName = "Gamra"
         self.VendorName = "Schoolar Projects"
         self.Version = "0.1"
