@@ -47,9 +47,9 @@ class MainFrame(wx.Frame):
         self.Layout()
         
         #=============== Creating Canvas =================
-        canvas = Canvas.Canvas( self, size=wx.Size(1000,1000) )  
-        box.Add(canvas, 10, wx.EXPAND | wx.ALL)
-          
+        self.Canvas = Canvas.Canvas( self, size=(1000,1000) )  
+        box.Add(self.Canvas, 10, wx.EXPAND | wx.ALL)
+        
         #=============== Creating Toolbar =================
         tb = ToolBar.ToolBar(self)
         #The second parameter to make the vertical resizing factor to Zero and 
@@ -57,7 +57,7 @@ class MainFrame(wx.Frame):
         box.Add(tb, 0, wx.EXPAND | wx.ALL)
         
         #====== TODO: the properties table
-        panel2 = wx.Panel(self,size=(0,100))
+        panel2 = wx.Panel( self, size=(0,100) )
         panel2.SetBackgroundColour("blue")
         box.Add(panel2, 0, wx.EXPAND | wx.ALL)
         

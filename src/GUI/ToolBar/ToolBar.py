@@ -33,8 +33,8 @@ class ToolBar(wx.ToolBar):
         #========== Making buttons of Editing tools =====
         for v in editTools:
             tool = self.AddRadioTool(-1,
-                     bitmap = wx.Bitmap( os.path.normpath("data/icons/"+v.icon)), 
-                     shortHelp = v.name,
+                     bitmap = wx.Bitmap( os.path.normpath("data/icons/"+v.Icon)), 
+                     shortHelp = v.Name,
                      longHelp = v.__doc__
                      )
             tool.ClientData = v
@@ -47,7 +47,7 @@ class ToolBar(wx.ToolBar):
         #================================================
         self.Tools = []
         self.Tools.extend(editTools)
-        self.Tools[0].Activate()
+        self.Tools[0].Activate(self.Parent.Canvas)
         self.ActiveTool = self.Tools[0]
             
     def OnToolChange(self,event):
@@ -58,7 +58,7 @@ class ToolBar(wx.ToolBar):
         
         #======== Activating and Deactivating
         self.ActiveTool.Deactivate()
-        tool.Activate()
+        tool.Activate(self.Parent.Canvas)
         
         #======== Setting new Tool
         self.ActiveTool = tool

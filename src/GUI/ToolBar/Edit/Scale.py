@@ -11,9 +11,8 @@ class Scale(EditingTool):
     '''
     
     def __init__(self):
-        EditingTool.__init__(self,name='Scale', icon='tool.png',canvas=None)
+        EditingTool.__init__(self,name='Scale', icon='tool.png')
         
-    def Activate(self):
-        print 'test the Scale activation'
-    def Deactivate(self):
-        print 'scale deactivated'
+    def OnMouseLeftDown(self,event):
+        print 'test'
+        event.Skip()
