@@ -8,6 +8,7 @@ Created on Jun 14, 2010
             contain library structure and so.
 '''
 import cairo
+from wx.lib.wxcairo import ContextFromDC
 
 class Path:
     def __init__(self):
@@ -78,13 +79,36 @@ class Document:
     '''
     def __init__(self,width,height):
         self.MetaData = MetaData
+        
         self.Objects = []
         self.ToolObjects = []
+        
         self.SelectedObjects = []
         self.SelectedToolsObjects = []
-        self.Clip = [0,0,0,0]
-        self.Antialias = cairo.ANTIALIAS_DEFAULT
         
-    def Render(self): pass
+        self.Width = width
+        self.Height = height
+        
+        self.Clip = [0,0,width,height]
+        self.Antialias = cairo.ANTIALIAS_DEFAULT
+        self.Zoom = 1
+        
+        self.Mouse = [0,0]
+       
+    def GetUnderPixel(self,pixel): pass
+    def Render(self,dc):
+        self.Clip[2:] = list(dc.GetSizeTuple())
+        ctx = ContextFromDC(dc)
+        ctx.set_line_width(15)
+        ctx.move_to(125, 25)
+        ctx.line_to(225, 225)
+        ctx.rel_line_to(-200, 0)
+        ctx.close_path()
+        ctx.set_source_rgba(0, 0, 0.5, 1)
+        ctx.stroke()
+        
+    
     def ToData(self): pass
     def FromData(self, data): pass
+    
+    
