@@ -33,7 +33,7 @@ class ToolBar(wx.ToolBar):
         #========== Making buttons of Editing tools =====
         for v in editTools:
             tool = self.AddRadioTool(-1,
-                     bitmap = wx.Bitmap( os.path.normpath("icons/"+v.icon)), 
+                     bitmap = wx.Bitmap( os.path.normpath("data/icons/"+v.icon)), 
                      shortHelp = v.name,
                      longHelp = v.__doc__
                      )

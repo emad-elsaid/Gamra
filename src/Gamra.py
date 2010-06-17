@@ -6,6 +6,7 @@ Created on Jun 3, 2010
 '''
 
 import wx
+import os.path
 from GUI.MainFrame import MainFrame
 from GUI.Splash import Splash
 
