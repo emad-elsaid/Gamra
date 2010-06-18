@@ -97,14 +97,14 @@ class Document:
        
     def GetUnderPixel(self,pixel): pass
     def Render(self,dc):
+        print self.Clip
         self.Clip[2:] = list(dc.GetSizeTuple())
         ctx = ContextFromDC(dc)
-        ctx.set_line_width(15)
-        ctx.move_to(125, 25)
-        ctx.line_to(225, 225)
-        ctx.rel_line_to(-200, 0)
-        ctx.close_path()
-        ctx.set_source_rgba(0, 0, 0.5, 1)
+        ctx.translate(self.Clip[0], self.Clip[1])
+        
+        ctx.set_line_width(1)
+        ctx.rectangle(-1,-1,self.Width+2,self.Height+2)
+        ctx.set_source_rgba(0, 0, 0, 1)
         ctx.stroke()
         
     
