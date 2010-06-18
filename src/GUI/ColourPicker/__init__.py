@@ -1,1 +1,1 @@
-__all_ = ["ColourPicker"]
+__all_ = ["ColourPicker", "ColourPickerEvent"]
