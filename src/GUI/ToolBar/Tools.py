@@ -5,7 +5,7 @@ Created on Jun 5, 2010
 '''
 import wx
 from wx.lib.graphics import GraphicsBitmap
-
+import math
 
 class Tool():
     '''
@@ -14,7 +14,6 @@ class Tool():
     def __init__(self, name='tool', icon='tool.png'):
         self.Name = name
         self.Icon = icon
-        self.Translate = False
             
     def Activate(self,canvas):
         self.Canvas = canvas
@@ -53,7 +52,6 @@ class Tool():
     def OnMouseLeftDown(self,event): event.Skip()
     
     def OnMouseMiddleDown(self,event): 
-        self.Translate = True
         self.StartPoint = self.Canvas.Document.Mouse
         event.Skip()
         
@@ -62,15 +60,15 @@ class Tool():
     def OnMouseLeftUp(self,event): event.Skip()
     
     def OnMouseMiddleUp(self,event): 
-        self.Translate = False
-        self.TranslateFrom = self
         event.Skip()
         
     def OnMouseRightUp(self,event): event.Skip()
     
     def OnMouseMove(self,event): 
-        self.Canvas.Document.Mouse = list(event.GetPositionTuple())
-        if(self.Translate==True):
+        
+        self.Canvas.Document.SetMouse(event.Position)
+        
+        if(event.Dragging() and event.MiddleIsDown() ):
             newpoint = self.Canvas.Document.Mouse
             self.Canvas.Document.Clip[0] += newpoint[0]-self.StartPoint[0]
             self.Canvas.Document.Clip[1] += newpoint[1]-self.StartPoint[1]
@@ -83,7 +81,16 @@ class Tool():
     def OnKeyDown(self,event): event.Skip()
     def OnKeyUp(self,event): event.Skip()
     
-    def OnWheel(self,event): event.Skip()
+    def OnWheel(self,event): 
+        if(event.GetWheelRotation()>0):
+            self.Canvas.Document.Zoom *= 1.1
+        else:
+            self.Canvas.Document.Zoom /= 1.1
+            
+        self.Canvas.Refresh()
+        
+        event.Skip()
+        
     def OnPaint(self, event):
         dc = wx.BufferedPaintDC(self.Canvas)
         dc.Clear()

@@ -9,6 +9,7 @@ Created on Jun 14, 2010
 '''
 import cairo
 from wx.lib.wxcairo import ContextFromDC
+import math
 
 class Path:
     def __init__(self):
@@ -89,25 +90,35 @@ class Document:
         self.Width = width
         self.Height = height
         
-        self.Clip = [0,0,width,height]
+        self.Clip = [100,100,width,height]
         self.Antialias = cairo.ANTIALIAS_DEFAULT
         self.Zoom = 1
         
-        self.Mouse = [0,0]
+        self.Mouse = (0,0)
        
     def GetUnderPixel(self,pixel): pass
+    
     def Render(self,dc):
         print self.Clip
+        print self.Zoom
         self.Clip[2:] = list(dc.GetSizeTuple())
         ctx = ContextFromDC(dc)
         ctx.translate(self.Clip[0], self.Clip[1])
+        ctx.scale(self.Zoom,self.Zoom)
         
-        ctx.set_line_width(1)
-        ctx.rectangle(-1,-1,self.Width+2,self.Height+2)
+        bor = 1#/self.Zoom
+        ctx.set_line_width(bor)
+        ctx.rectangle(-1,-1,self.Width+bor*2,self.Height+bor*2)
         ctx.set_source_rgba(0, 0, 0, 1)
         ctx.stroke()
         
-    
+    def SetMouse(self,position):
+        self.Mouse = self.Pixel2Coord(position)
+        
+    def Pixel2Coord(self,pixel):
+            return ((pixel[0]*self.Zoom  - self.Clip[0]),
+                    (pixel[1]*self.Zoom  - self.Clip[1]))
+          
     def ToData(self): pass
     def FromData(self, data): pass
     
