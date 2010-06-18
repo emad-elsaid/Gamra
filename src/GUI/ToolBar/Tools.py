@@ -75,6 +75,7 @@ class Tool():
             self.Canvas.Document.Clip[0] += newpoint[0]-self.StartPoint[0]
             self.Canvas.Document.Clip[1] += newpoint[1]-self.StartPoint[1]
             self.StartPoint = newpoint
+            self.Canvas.Refresh()
                 
         wx.GetApp().Frame.SetStatusText('Current Position:'+str(self.Canvas.Document.Mouse))
         event.Skip()
