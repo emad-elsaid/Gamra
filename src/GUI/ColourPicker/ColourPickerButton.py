@@ -5,7 +5,7 @@ Created on Jun 16, 2010
 '''
 import wx
 from wx.lib.statbmp import GenStaticBitmap
- 
+
 class ColourPickerButton:
     '''
     A button that shows a panel contains an image which 
@@ -21,15 +21,13 @@ class ColourPickerButton:
         
         self.bmpImage = wx.Bitmap("../../data/palettes/colorcube.gif", wx.BITMAP_TYPE_GIF)
         buttonPosTuple = self.button.GetPositionTuple()
-        #self.panelWindow = wx.Window(parent, id, (buttonPosTuple[0] - self.bmpImage.GetWidth(), buttonPosTuple[1] - self.bmpImage.GetHeight()), 
-        #(self.bmpImage.GetWidth(), self.bmpImage.GetHeight()), wx.NO_BORDER, name)
-        self.panel = wx.Panel(parent, id, (buttonPosTuple[0] - self.bmpImage.GetWidth(), buttonPosTuple[1] - self.bmpImage.GetHeight())
+        self.panel = wx.Panel(parent, id, (buttonPosTuple[0] , buttonPosTuple[1] - self.bmpImage.GetHeight())
                 , (self.bmpImage.GetWidth(), self.bmpImage.GetHeight()),  wx.TAB_TRAVERSAL)
-        #self.panelWindow.Show(False)
-        GenStaticBitmap(self.panel, id, self.bmpImage, (0, 0), size)
+        
+        self.staticBitmap = GenStaticBitmap(self.panel, id, self.bmpImage, (0, 0), size)
         self.panel.Show(False)
         self.button.Bind(wx.EVT_BUTTON, self.OnClickButton)
-        self.panel.Bind(wx.EVT_LEFT_DOWN, self.OnClickPanel)
+        wx.EVT_LEFT_DOWN(self.staticBitmap, self.OnMouseDown)
     
     def Show(self, flag=True):
         self.button.Show(flag)
@@ -40,8 +38,15 @@ class ColourPickerButton:
     def GetColour(self):
         return self.colour
     
-    def OnClickPanel(self, event):
-        print 'Hello'
+    def OnMouseDown(self, event):
+        image = self.bmpImage.ConvertToImage()
+        x, y = event.GetPosition()
+        r = image.GetRed(x, y) 
+        g = image.GetGreen(x, y)
+        b = image.GetBlue(x, y)
+        self.colour.Set(r, g, b)
+        self.panel.Show(False)
+        
     def OnClickButton(self, event):
         '''
         Event Generated when the button clicked
