@@ -116,8 +116,8 @@ class Document:
         self.Mouse = self.Pixel2Coord(position)
         
     def Pixel2Coord(self,pixel):
-            return ((pixel[0]*self.Zoom  - self.Clip[0]),
-                    (pixel[1]*self.Zoom  - self.Clip[1]))
+            return (int((pixel[0] - self.Clip[0])/self.Zoom),
+                    int((pixel[1] - self.Clip[1])/self.Zoom))
           
     def ToData(self): pass
     def FromData(self, data): pass

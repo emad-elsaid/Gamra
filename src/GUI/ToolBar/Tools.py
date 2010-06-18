@@ -72,7 +72,6 @@ class Tool():
             newpoint = self.Canvas.Document.Mouse
             self.Canvas.Document.Clip[0] += newpoint[0]-self.StartPoint[0]
             self.Canvas.Document.Clip[1] += newpoint[1]-self.StartPoint[1]
-            self.StartPoint = newpoint
             self.Canvas.Refresh()
                 
         wx.GetApp().Frame.SetStatusText('Current Position:'+str(self.Canvas.Document.Mouse))
@@ -81,12 +80,12 @@ class Tool():
     def OnKeyDown(self,event): event.Skip()
     def OnKeyUp(self,event): event.Skip()
     
-    def OnWheel(self,event): 
+    def OnWheel(self,event):
         if(event.GetWheelRotation()>0):
             self.Canvas.Document.Zoom *= 1.1
         else:
-            self.Canvas.Document.Zoom /= 1.1
-            
+            self.Canvas.Document.Zoom /= 1.1          
+        
         self.Canvas.Refresh()
         
         event.Skip()
