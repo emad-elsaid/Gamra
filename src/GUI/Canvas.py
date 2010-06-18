@@ -13,10 +13,5 @@ class Canvas(wx.Panel):
     draw, scroll, resize,...etc
     '''
     def __init__(self, parent, size):
-        wx.Panel.__init__(self, parent, -1,style=wx.FULL_REPAINT_ON_RESIZE)
+        wx.Panel.__init__(self, parent, -1,style=wx.FULL_REPAINT_ON_RESIZE|wx.BG_STYLE_CUSTOM)
         self.Document = Document.Document(size[0], size[1])
-        
-    def Refresh(self):
-        self.GetEventHandler().ProcessEvent(wx.PaintEvent(self.Id))
-        
-        
