@@ -12,8 +12,3 @@ class Select(EditingTool):
     
     def __init__(self):
         EditingTool.__init__(self,name='Select', icon='select.png')
-        
-    def Activate(self,canvas):
-        print 'test the selection activation'
-    def Deactivate(self):
-        print 'selection deactivated'
