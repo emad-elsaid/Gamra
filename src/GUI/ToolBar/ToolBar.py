@@ -41,7 +41,8 @@ class ToolBar(wx.ToolBar):
             self.Bind(wx.EVT_MENU, self.OnToolChange, tool)
             
         self.AddSeparator()
-        
+
+        self.Realize()
         #================================================
         # Note: we have to merge all tools lists to (self.Tools)
         #================================================
