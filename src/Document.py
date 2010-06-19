@@ -90,7 +90,7 @@ class Document:
         self.Width = width
         self.Height = height
         
-        self.Clip = [100,100,width,height]
+        self.Clip = [-100,-100,width,height]
         self.Antialias = cairo.ANTIALIAS_DEFAULT
         self.Zoom = 1
         
@@ -99,25 +99,27 @@ class Document:
     def GetUnderPixel(self,pixel): pass
     
     def Render(self,dc):
-        print self.Clip
-        print self.Zoom
         self.Clip[2:] = list(dc.GetSizeTuple())
         ctx = ContextFromDC(dc)
-        ctx.translate(self.Clip[0], self.Clip[1])
+        ctx.translate(-self.Clip[0], -self.Clip[1])
         ctx.scale(self.Zoom,self.Zoom)
         
-        bor = 1/self.Zoom
+        bor = 2/self.Zoom
         ctx.set_line_width(bor)
         ctx.rectangle(-1,-1,self.Width+bor*2,self.Height+bor*2)
-        ctx.set_source_rgba(0, 0, 0, 1)
+        ctx.set_antialias(cairo.ANTIALIAS_NONE)
+        ctx.set_source_rgb(1, 1, 1)
+        ctx.fill_preserve()
+        ctx.set_source_rgb(0, 0, 0)
         ctx.stroke()
+        ctx.set_antialias(cairo.ANTIALIAS_DEFAULT)
         
     def SetMouse(self,position):
         self.Mouse = self.Pixel2Coord(position)
         
     def Pixel2Coord(self,pixel):
-            return (int((pixel[0] - self.Clip[0])/self.Zoom),
-                    int((pixel[1] - self.Clip[1])/self.Zoom))
+            return (int((pixel[0] + self.Clip[0])/self.Zoom),
+                    int((pixel[1] + self.Clip[1])/self.Zoom))
           
     def ToData(self): pass
     def FromData(self, data): pass

@@ -4,8 +4,6 @@ Created on Jun 5, 2010
 @author: blaze
 '''
 import wx
-from wx.lib.graphics import GraphicsBitmap
-import math
 
 class Tool():
     '''
@@ -59,8 +57,7 @@ class Tool():
     
     def OnMouseLeftUp(self,event): event.Skip()
     
-    def OnMouseMiddleUp(self,event): 
-        event.Skip()
+    def OnMouseMiddleUp(self,event): event.Skip()
         
     def OnMouseRightUp(self,event): event.Skip()
     
@@ -70,11 +67,16 @@ class Tool():
         
         if(event.Dragging() and event.MiddleIsDown() ):
             newpoint = self.Canvas.Document.Mouse
-            self.Canvas.Document.Clip[0] += newpoint[0]-self.StartPoint[0]
-            self.Canvas.Document.Clip[1] += newpoint[1]-self.StartPoint[1]
+            zoom = self.Canvas.Document.Zoom
+            self.Canvas.Document.Clip[0] -= int((newpoint[0]-self.StartPoint[0])*zoom)
+            self.Canvas.Document.Clip[1] -= int((newpoint[1]-self.StartPoint[1])*zoom)
             self.Canvas.Refresh()
                 
-        wx.GetApp().Frame.SetStatusText('Current Position:'+str(self.Canvas.Document.Mouse))
+        wx.GetApp().Frame.SetStatusText(
+                        'Current Position:'+str(self.Canvas.Document.Mouse)+
+                        ',Zoom : '+str(self.Canvas.Document.Zoom*100)+'%'+
+                        ',Clipping :'+str(self.Canvas.Document.Clip)
+                        )
         event.Skip()
     
     def OnKeyDown(self,event): event.Skip()
@@ -82,9 +84,9 @@ class Tool():
     
     def OnWheel(self,event):
         if(event.GetWheelRotation()>0):
-            self.Canvas.Document.Zoom *= 1.1
+            self.Canvas.Document.Zoom = round(self.Canvas.Document.Zoom*1.1,2)
         else:
-            self.Canvas.Document.Zoom /= 1.1          
+            self.Canvas.Document.Zoom = round(self.Canvas.Document.Zoom/1.1,2)          
         
         self.Canvas.Refresh()
         
@@ -92,6 +94,7 @@ class Tool():
         
     def OnPaint(self, event):
         dc = wx.BufferedPaintDC(self.Canvas)
+        dc.SetBackground(wx.Brush(wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENU)))
         dc.Clear()
         self.Canvas.Document.Render(dc)
     
