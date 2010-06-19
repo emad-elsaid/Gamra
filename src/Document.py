@@ -106,7 +106,7 @@ class Document:
         ctx.translate(self.Clip[0], self.Clip[1])
         ctx.scale(self.Zoom,self.Zoom)
         
-        bor = 1#/self.Zoom
+        bor = 1/self.Zoom
         ctx.set_line_width(bor)
         ctx.rectangle(-1,-1,self.Width+bor*2,self.Height+bor*2)
         ctx.set_source_rgba(0, 0, 0, 1)
