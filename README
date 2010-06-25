@@ -1,0 +1,22 @@
+Gamra
+======
+Description:
+	Gamra is a graphics application aim to replace fireworks for both
+	linux, windows, 
+	the application is a targeting webdesigners 
+	
+Tools and libraries:
+	Python
+	wxpython
+	cairo
+	
+Requirements:
+	vector illustration
+	Raster images modefication
+	ease of use
+	
+Developers:
+	Faculty of computer and informatics students
+	Suez canal university, Egypt
+	the project is developed as summer training course 2009/2010
+	 
