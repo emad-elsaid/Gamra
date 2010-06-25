@@ -131,7 +131,7 @@ class ColourPickerWidget:
         self.button = ColourPickerButton(parent, id, pos, size)
         self.button.Show(True)
         
-        self.bmpImage = wx.Bitmap("../../data/palettes/colorcube.gif", wx.BITMAP_TYPE_GIF)
+        self.bmpImage = wx.Bitmap("data/palettes/colorcube.gif", wx.BITMAP_TYPE_GIF)
         buttonPosTuple = self.button.GetPositionTuple()
         self.panel = ColourPickerPanel(parent, self.bmpImage, id, (buttonPosTuple[0] , buttonPosTuple[1] - self.bmpImage.GetHeight() - 27)
                 ,wx.TAB_TRAVERSAL)
