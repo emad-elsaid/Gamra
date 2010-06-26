@@ -4,6 +4,7 @@ Created on Jun 16, 2010
 @author: ramdac
 '''
 import wx
+import re
 from wx.lib.statbmp import GenStaticBitmap
 
 class ColourPickerPanel(wx.Panel):
@@ -57,7 +58,12 @@ class ColourPickerPanel(wx.Panel):
         return self.staticBitmap
     
     def OnTextCtrl(self, event):
-        self.colour.SetFromString(self.colourTextCtrl.GetValue())
+        textCtrlValue = self.colourTextCtrl.GetValue()
+        if re.match(r'#[0-9a-fA-F]{6}', textCtrlValue) == None:
+			self.colour.SetFromString("#FFFFFF")
+			
+        else:
+			self.colour.SetFromString(textCtrlValue)
         self.UpdatePanel()
         self.button.SetBackgroundColour(self.colour)
         self.Show(False)
@@ -160,3 +166,4 @@ class ColourPickerWidget:
             self.panel.Show(False)
             return
         self.panel.Show(True)
+
