@@ -116,43 +116,32 @@ class ColourPickerPanel(wx.Panel):
         '''
         self.button = button
 
-
-class ColourPickerButton(wx.Button):
-    def __init__(self, parent, id, pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.BU_EXACTFIT):
-        wx.Button.__init__(self, parent, id, wx.EmptyString, pos, size, style)
-    def SetColour(self, colour):
-        self.SetBackgroundColour(colour)
-    
+   
         
-    
-        
-class ColourPickerWidget:
+class ColourPickerWidget(wx.Button):
     '''
     A Widget that shows a panel contains an image which 
     resembles a palette of colors the user can choose from. 
     '''
     def __init__(self, parent, id, colour, pos = wx.DefaultPosition,  size = wx.DefaultSize, 
          style = 0, validator = wx.DefaultValidator, name = "button"):
-        
-        self.button = ColourPickerButton(parent, id, pos, size)
-        self.button.Show(True)
+        #wx.Control.__init__(self, parent, id, pos, size)
+        wx.Button.__init__(self, parent, id, wx.EmptyString, pos, size, style, validator, name)
+        #self.button = ColourPickerButton(parent, id, pos, size)
+        self.Show(True)
         
         self.bmpImage = wx.Bitmap("data/palettes/colorcube.gif", wx.BITMAP_TYPE_GIF)
-        buttonPosTuple = self.button.GetPositionTuple()
+        buttonPosTuple = self.GetPositionTuple()
         self.panel = ColourPickerPanel(parent, self.bmpImage, id, (buttonPosTuple[0] , buttonPosTuple[1] - self.bmpImage.GetHeight() - 27)
                 ,wx.TAB_TRAVERSAL)
         self.panel.Show(False)
-        self.panel.SetButton(self.button)
+        self.panel.SetButton(self)
         self.SetColour(colour)
-        self.button.Bind(wx.EVT_BUTTON, self.OnClickButton) 
+        self.Bind(wx.EVT_BUTTON, self.OnClickButton) 
        
-    
-    def Show(self, flag=True):
-        self.button.Show(flag)
-    
     def SetColour(self, colour):
         self.panel.SetColour(colour)
-        self.button.SetBackgroundColour(colour)
+        self.SetBackgroundColour(colour)
     def GetColour(self):
         colour =  self.panel.GetColour()
         return colour.Get(True)
@@ -162,8 +151,7 @@ class ColourPickerWidget:
         Event Generated when the button clicked
         '''
         if self.panel.IsShown() == True:
-            self.button.SetColour(self.panel.GetColour())
+            self.SetColour(self.panel.GetColour())
             self.panel.Show(False)
             return
         self.panel.Show(True)
-
