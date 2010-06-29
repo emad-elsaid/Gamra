@@ -8,7 +8,7 @@ import os
 import Canvas
 import AboutBox
 from ToolBar import ToolBar
-from GUI.ColourPicker.ColourPickerButton import ColourPickerWidget
+from GUI.ColourPicker.ColourPickerWidget import ColourPickerWidget
 
 class MainFrame(wx.Frame):
     
