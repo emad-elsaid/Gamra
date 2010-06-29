@@ -21,12 +21,13 @@ class ColourPickerPanel(wx.Panel):
         #TODO:Change this habit
         self.button = None
         self.colour = wx.BLACK
-        self.colourTextCtrl = wx.TextCtrl(self, pos = (50, 0), style = wx.TE_PROCESS_ENTER)
+        self.colourTextCtrl = wx.TextCtrl(self, pos = (50, 0), style = wx.TE_READONLY)
         self.colourTextCtrl.SetValue(self.colour.GetAsString(wx.C2S_HTML_SYNTAX))
         self.staticBitmap = GenStaticBitmap(self, id, self.bmpImage)
         self.colourPanel = wx.Panel(self, id, size = (50,20), style = wx.BORDER_DOUBLE)
         self.colourChooserButton = wx.BitmapButton(self, id, wx.Bitmap("data/icons/color_wheel.png", wx.BITMAP_TYPE_PNG))
         self.colourChooserDialog = wx.ColourDialog(self)
+        self.colourChooserDialog.CentreOnScreen()
         self.mainSizer = wx.BoxSizer(wx.VERTICAL)
         self.currentSelectionSizer = wx.BoxSizer(wx.HORIZONTAL)
         
@@ -43,7 +44,9 @@ class ColourPickerPanel(wx.Panel):
         
         
         self.mainSizer.SetSizeHints(self)
+        self.SetAutoLayout(True)
         self.staticBitmap.Show(True)
+        self.mainSizer.Fit(self)
         self.SetSizer(self.mainSizer)
         
         #self.colourPanel = wx.Panel(self, wx.ID_ANY, (0, 0), (20, 15))
@@ -58,15 +61,16 @@ class ColourPickerPanel(wx.Panel):
         return self.staticBitmap
     
     def OnTextCtrl(self, event):
+        print 'Hello'
         textCtrlValue = self.colourTextCtrl.GetValue()
         if re.match(r'#[0-9a-fA-F]{6}', textCtrlValue) == None:
-			self.colour.SetFromString("#FFFFFF")
-			
+            self.colour.SetFromString("#FFFFFF")
         else:
-			self.colour.SetFromString(textCtrlValue)
+            self.colour.SetFromString(textCtrlValue)
         self.UpdatePanel()
         self.button.SetBackgroundColour(self.colour)
         self.Show(False)
+        
                 
     def UpdatePanel(self):
         self.colourPanel.SetBackgroundColour(self.colour)
@@ -82,6 +86,7 @@ class ColourPickerPanel(wx.Panel):
         self.colourTextCtrl.SetValue(self.colour.GetAsString(wx.C2S_HTML_SYNTAX))
     
     def OnColourChooserButton(self, event):
+        self.GetParent().Dismiss()
         clickedButton = self.colourChooserDialog.ShowModal()
         if clickedButton == wx.ID_OK:
             colour = self.colourChooserDialog.GetColourData().GetColour()
@@ -90,7 +95,10 @@ class ColourPickerPanel(wx.Panel):
             self.colourTextCtrl.SetValue(self.colour.GetAsString(wx.C2S_HTML_SYNTAX))
             self.button.SetBackgroundColour(self.colour)
             self.Show(False)
+            #The parent of the panel is the wxPopupTransientWindow
+            self.GetParent().Dismiss()
         elif clickedButton == wx.ID_CANCEL:
+            self.GetParent().Popup()
             return
         
     def OnMouseDown(self, event):
@@ -101,6 +109,7 @@ class ColourPickerPanel(wx.Panel):
         self.colour.Set(r, g, b)
         self.button.SetColour(self.colour)
         self.Show(False)
+        self.GetParent().Dismiss()
         
     def GetColour(self):
         return self.colour
@@ -122,19 +131,24 @@ class ColourPickerWidget(wx.Button):
     '''
     A Widget that shows a panel contains an image which 
     resembles a palette of colors the user can choose from. 
-    '''
+  '''
     def __init__(self, parent, id, colour, pos = wx.DefaultPosition,  size = wx.DefaultSize, 
-         style = 0, validator = wx.DefaultValidator, name = "button"):
+       style = 0, validator = wx.DefaultValidator, name = "button"):
         #wx.Control.__init__(self, parent, id, pos, size)
         wx.Button.__init__(self, parent, id, wx.EmptyString, pos, size, style, validator, name)
         #self.button = ColourPickerButton(parent, id, pos, size)
         self.Show(True)
         
         self.bmpImage = wx.Bitmap("data/palettes/colorcube.gif", wx.BITMAP_TYPE_GIF)
-        buttonPosTuple = self.GetPositionTuple()
-        self.panel = ColourPickerPanel(parent, self.bmpImage, id, (buttonPosTuple[0] , buttonPosTuple[1] - self.bmpImage.GetHeight() - 27)
+        #buttonPosTuple = self.GetScreenPositionTuple()
+        self.popupWindow = wx.PopupTransientWindow(parent)
+        self.popupWindow.SetAutoLayout(True)
+        self.panel = ColourPickerPanel(self.popupWindow, self.bmpImage, id, wx.DefaultPosition
                 ,wx.TAB_TRAVERSAL)
-        self.panel.Show(False)
+        #self.popupWindow.Position((buttonPosTuple[0] , buttonPosTuple[1] - self.bmpImage.GetHeight() - 27), self.panel.GetSize())
+        self.popupWindow.Dismiss()
+        self.panel.GetSizer().Fit(self.popupWindow)
+        self.panel.Show(True)
         self.panel.SetButton(self)
         self.SetColour(colour)
         self.Bind(wx.EVT_BUTTON, self.OnClickButton) 
@@ -150,8 +164,20 @@ class ColourPickerWidget(wx.Button):
         '''
         Event Generated when the button clicked
         '''
-        if self.panel.IsShown() == True:
+        buttonPosTuple = self.GetScreenPositionTuple()
+        self.popupWindow.Position((buttonPosTuple[0] , buttonPosTuple[1] ), wx.DefaultSize)
+        if self.popupWindow.IsShown() == True:
             self.SetColour(self.panel.GetColour())
-            self.panel.Show(False)
+            self.popupWindow.Dismiss()
             return
+        self.popupWindow.Popup()
         self.panel.Show(True)
+
+
+if __name__ == "__main__":
+    a = wx.App()
+    frame = wx.Frame(None, -1, "Hello", size = (500, 500))
+    x = ColourPickerWidget(frame, -1, wx.CYAN, pos = (200, 300), size = (30, 30))
+    print x.GetColour()
+    frame.Show(True)
+    a.MainLoop()
