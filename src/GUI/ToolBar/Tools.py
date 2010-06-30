@@ -4,6 +4,8 @@ Created on Jun 5, 2010
 @author: blaze
 '''
 import wx
+import Document
+import cairo
 
 class Tool():
     '''
@@ -47,7 +49,38 @@ class Tool():
         self.Canvas.Unbind(wx.EVT_MOUSEWHEEL)
         self.Canvas.Unbind(wx.EVT_PAINT)
     
-    def OnMouseLeftDown(self,event): event.Skip()
+    def OnMouseLeftDown(self,event): 
+        
+        selected = self.Canvas.Document.GetUnderPixel(self.Canvas.Document.Mouse)
+        # check if there is something selected
+        if( selected!=None ):
+            
+            # check if shift is down, that will add,remove element from selection
+            if event.ShiftDown() :
+                if( selected in self.Canvas.Document.SelectedObjects ):
+                    self.Canvas.Document.SelectedObjects.remove(selected)
+                else:
+                    self.Canvas.Document.SelectedObjects.append(selected)
+                    
+            #if shift is not down, the selection will be only the object
+            else:
+                self.Canvas.Document.SelectedObjects = [selected]
+                
+            # create the highlight rectangle around selected objects 
+            highlight = self.Canvas.Document.GetRect(self.Canvas.Document.SelectedObjects)
+            highlight.Stroke.Dash = [5,5]
+            highlight.Fill.Color = (0,0,0,0)
+            highlight.Antialiase = cairo.ANTIALIAS_NONE
+            self.Canvas.Document.ToolObjects = [highlight]
+            
+        # if nothing clicked then clear the toolobjects and the selected objects
+        else:
+            self.Canvas.Document.ToolObjects = []
+            self.SelectedObjects = []
+            
+        # after all reftesh the canvas
+        self.Canvas.Refresh()
+        event.Skip()
     
     def OnMouseMiddleDown(self,event): 
         self.StartPoint = self.Canvas.Document.Mouse
@@ -74,8 +107,8 @@ class Tool():
                 
         wx.GetApp().Frame.SetStatusText(
                         'Current Position:'+str(self.Canvas.Document.Mouse)+
-                        ',Zoom : '+str(self.Canvas.Document.Zoom*100)+'%'+
-                        ',Clipping :'+str(self.Canvas.Document.Clip)
+                        ', Zoom : '+str(self.Canvas.Document.Zoom*100)+'%'+
+                        ', Clipping :'+str(self.Canvas.Document.Clip)
                         )
         event.Skip()
     

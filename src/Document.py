@@ -56,7 +56,7 @@ class Path:
 
 class Stroke:
     def __init__(self):
-        self.Width = 2.0
+        self.Width = 1.0
         self.Dash = []
         self.DashOffset = 0
         self.Cap = cairo.LINE_CAP_BUTT
@@ -117,8 +117,7 @@ class Object:
             self.Path.Apply(context)
             self.Fill.Apply(context)
             self.Stroke.Apply(context)
-        
-        
+            
     def ToData(self): pass
     def FromData(self, data): pass
        
@@ -126,9 +125,9 @@ class Rectangle(Object):
     def __init__(self,x,y,w,h):
         Object.__init__(self)
         self.Path.add1(x, y)
-        self.Path.add1(w, y)
-        self.Path.add1(w, h)
-        self.Path.add1(x, h)
+        self.Path.add1(x+w, y)
+        self.Path.add1(x+w, y+h)
+        self.Path.add1(x, y+h)
         self.Path.Closed = True
         
     
@@ -155,11 +154,14 @@ class Document:
     def __init__(self,width,height):
         self.MetaData = MetaData
         
-        self.Objects = []
+        self.Objects = [Rectangle(5,5,100,100),
+                        Rectangle(50,50,100,100),
+                        Rectangle(110,110,100,100),
+                        Rectangle(150,150,100,100)]
         self.ToolObjects = []
         
         self.SelectedObjects = []
-        self.SelectedToolsObjects = []
+        self.SelectedToolObjects = []
         
         self.Width = width
         self.Height = height
@@ -169,9 +171,30 @@ class Document:
         self.Zoom = 1
         
         self.Mouse = (0,0)
+        
+        self.Border = Rectangle(-2,-2,self.Width+2*2,self.Height+2*2)
+        self.Border.Stroke.Width = 2
+        self.Border.Antialias = cairo.ANTIALIAS_NONE
        
     def GetUnderPixel(self,pixel,returnList=False):
-        pass
+        ctx = cairo.Context(cairo.ImageSurface(cairo.FORMAT_ARGB32,0,0))
+        
+        revObjects = self.Objects[:]
+        revObjects.reverse()
+        
+        result = []
+        for i in revObjects:
+            i.Apply(ctx)
+            if ctx.in_fill(pixel[0],pixel[1]) or ctx.in_stroke(pixel[0],pixel[1]) :
+                if returnList :
+                    result.append(i)
+                else:
+                    return i
+        if returnList :
+            return result
+        else:
+            return None
+            
     
     def Render(self,dc):
         self.Clip[2:] = list(dc.GetSizeTuple())
@@ -179,13 +202,28 @@ class Document:
         ctx.translate(-self.Clip[0], -self.Clip[1])
         ctx.scale(self.Zoom,self.Zoom)
         
-        bor = 2/self.Zoom
-        border = Rectangle(-bor,-bor,self.Width+bor*2,self.Height+bor*2)
-        border.Stroke.Width = bor        
-        border.Antialias = cairo.ANTIALIAS_NONE
-        border.Apply(ctx)
-        
+        self.Border.Apply(ctx)
         self.DrawAll(ctx, self.Objects)
+        self.DrawAll(ctx, self.ToolObjects)
+        
+    def GetRect(self, Objects ):
+        path = []
+        for i in Objects:
+            for point in i.Path.Points:
+                path.append(point[1])
+                
+        l,t = path[0]
+        r,b = path[0]
+        for i in path:
+            if i[0]<l :
+                l = i[0]
+            if i[1]<t :
+                t = i[1]
+            if i[0]>r :
+                r = i[0]
+            if i[1]>b :
+                b = i[1]
+        return Rectangle(l-1,t-1,r-l+2,b-t+2)
         
     def DrawAll(self, ctx, list):
         for i in list:
