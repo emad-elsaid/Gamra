@@ -47,15 +47,10 @@ class Path:
             
     def add1(self, x, y): 
         self.Points.append([None,[x,y],None])
-           
-    def add2(self,hx,hy,x,y):
-        self.Points.append([[hx,hy],[x,y],[hx,hy]])
         
     def add3(self,h1x,h1y,x,y,h2x,h2y):
         self.Points.append([[h1x,h1y],[x,y],[h2x,h2y]])
         
-    def Scale(self,xScale,yScale): pass
-    def Translate(self,xDelta,yDelta): pass
     def ToData(self): pass
     def FromData(self, data): pass
 
@@ -115,8 +110,6 @@ class Object:
         self.Visible = True
         self.Locked = False
         
-    def Scale(self,xScale,yScale): pass
-    def Translate(self,xDelta,yDelta): pass
     
     def Apply(self, context):
         if self.Visible :
@@ -167,7 +160,8 @@ class Document:
         
         self.Mouse = (0,0)
        
-    def GetUnderPixel(self,pixel): pass
+    def GetUnderPixel(self,pixel,returnList=False):
+        pass
     
     def Render(self,dc):
         self.Clip[2:] = list(dc.GetSizeTuple())
@@ -186,6 +180,11 @@ class Document:
         border.Path.Closed = True
         border.Antialias = cairo.ANTIALIAS_NONE
         border.Apply(ctx)
+        self.DrawAll(ctx, self.Objects)
+        
+    def DrawAll(self, ctx, list):
+        for i in list:
+            i.Apply(ctx)
         
     def SetMouse(self,position):
         self.Mouse = self.Pixel2Coord(position)
