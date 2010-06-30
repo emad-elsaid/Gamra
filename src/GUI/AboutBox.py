@@ -24,7 +24,7 @@ create beautiful website using raster and vector images"
         
         self.info.Version = wx.GetApp().Version
         self.info.Icon = wx.Icon(os.path.normpath('data/icons/icon256.png'),wx.BITMAP_TYPE_PNG)
-        self.info.WebSite = "http://www.Gamra.com"
+        self.info.WebSite = "http://github.com/blazeeboy/Gamra"
         
         self.info.SetLicence('''
         This program is free software; you can redistribute it and/or modify
