@@ -22,17 +22,8 @@ class Generic(wx.Panel):
         self.mainSizer.Add(self.leftSizer, 0)
         self.mainSizer.SetSizeHints(self)
         self.SetSizer(self.mainSizer)
-        self.Show(True)
+        self.Show(False)
         
     def Activate(self, canvas ): pass
     def Deactivate(self, canvas): pass
         
-'''
-if __name__ == "__main__":
-    a = wx.App()
-    frame = wx.Frame(None, -1, "Hello")
-    g = Generic(frame, -1, iconPath = '../../data/icons/tool.png')
-    g.Show(True)
-    frame.Show()
-    a.MainLoop()
-'''

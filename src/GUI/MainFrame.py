@@ -58,7 +58,7 @@ class MainFrame(wx.Frame):
         box.Add(tb, 0, wx.EXPAND | wx.ALL)
         
         #====== TODO: the properties table
-        self.Properties = EditorPanel(self, size = wx.Size(300, 200))
+        self.Properties = EditorPanel(self, size = wx.Size(0, 100))
         self.Properties.SetBackgroundColour("blue")
         box.Add(self.Properties, 0, wx.EXPAND | wx.ALL)
         
