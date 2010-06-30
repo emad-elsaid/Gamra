@@ -132,7 +132,7 @@ class ColourPickerWidget(wx.Button):
     A Widget that shows a panel contains an image which 
     resembles a palette of colors the user can choose from. 
   '''
-    def __init__(self, parent, id, colour, pos = wx.DefaultPosition,  size = (25,25), 
+    def __init__(self, parent, id=wx.ID_ANY, colour=(0,0,0,1), pos = wx.DefaultPosition,  size = (25,25), 
        style=0, validator = wx.DefaultValidator, name = "button"):
         wx.Button.__init__(self, parent, id, wx.EmptyString, pos, size, style, validator, name)
         self.Show(True)

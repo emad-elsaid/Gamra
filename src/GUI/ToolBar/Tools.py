@@ -112,7 +112,18 @@ class Tool():
                         )
         event.Skip()
     
-    def OnKeyDown(self,event): event.Skip()
+    def OnKeyDown(self,event):
+        keycode = event.GetKeyCode()
+        if keycode == wx.WXK_TAB:
+            
+            #check the visibility of the panel..
+            if wx.GetApp().Frame.Properties.IsShown(): 
+                wx.GetApp().Frame.Properties.Hide()
+            else:
+                wx.GetApp().Frame.Properties.Show()
+                wx.GetApp().Frame.FitInside()
+                
+                
     def OnKeyUp(self,event): event.Skip()
     
     def OnWheel(self,event):
