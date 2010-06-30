@@ -82,7 +82,7 @@ class Stroke:
 class Fill:
     def __init__(self):
         self.Rule = cairo.FILL_RULE_WINDING
-        self.Color = (0.5,0.5,0.5,1)
+        self.Color = (1,1,1,1)
         
     def Apply(self, context, preserve=True ):
         context.set_fill_rule(self.Rule)
@@ -122,6 +122,16 @@ class Object:
     def ToData(self): pass
     def FromData(self, data): pass
        
+class Rectangle(Object):
+    def __init__(self,x,y,w,h):
+        Object.__init__(self)
+        self.Path.add1(x, y)
+        self.Path.add1(w, y)
+        self.Path.add1(w, h)
+        self.Path.add1(x, h)
+        self.Path.Closed = True
+        
+    
 class MetaData:
     '''
     this is the meta data class for document
@@ -170,16 +180,11 @@ class Document:
         ctx.scale(self.Zoom,self.Zoom)
         
         bor = 2/self.Zoom
-        border = Object()
-        border.Stroke.Width = bor
-        border.Fill.Color = (1,1,1,1)        
-        border.Path.add1(-bor*2, -bor*2)
-        border.Path.add1(self.Width+bor*2, -bor*2)
-        border.Path.add1(self.Width+bor*2, self.Height+bor*2)
-        border.Path.add1(-bor*2, self.Height+bor*2)
-        border.Path.Closed = True
+        border = Rectangle(-bor,-bor,self.Width+bor*2,self.Height+bor*2)
+        border.Stroke.Width = bor        
         border.Antialias = cairo.ANTIALIAS_NONE
         border.Apply(ctx)
+        
         self.DrawAll(ctx, self.Objects)
         
     def DrawAll(self, ctx, list):
