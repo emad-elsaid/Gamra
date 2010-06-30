@@ -8,7 +8,7 @@ import os
 import Canvas
 import AboutBox
 from ToolBar import ToolBar
-from GUI.ColourPicker.ColourPickerButton import ColourPickerWidget
+from GUI.ColourPicker.ColourPickerWidget import ColourPickerWidget
 
 class MainFrame(wx.Frame):
     
@@ -57,11 +57,11 @@ class MainFrame(wx.Frame):
         box.Add(tb, 0, wx.EXPAND | wx.ALL)
         
         #====== TODO: the properties table
-        panel2 = wx.Panel( self, size=(0,100) )
-        panel2.SetBackgroundColour("blue")
-        box.Add(panel2, 0, wx.EXPAND | wx.ALL)
+        self.Properties = wx.Panel( self, size=(0,100) )
+        self.Properties.SetBackgroundColour("blue")
+        box.Add(self.Properties, 0, wx.EXPAND | wx.ALL)
         
-        c = ColourPickerWidget(panel2,-1,wx.Color(20,20,50))
+        c = ColourPickerWidget(self.Properties,-1,wx.Color(20,20,50))
         
         #connecting functions with actions
         wx.EVT_MENU(self, wx.ID_EXIT, self.OnExit)
