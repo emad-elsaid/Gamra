@@ -1,1 +1,1 @@
-__all__ = ["AboutBox", "MainFrame"]
+__all__ = ["AboutBox", "MainFrame", "EditorPanel"]
