@@ -76,7 +76,7 @@ class Tool():
         # if nothing clicked then clear the toolobjects and the selected objects
         else:
             self.Canvas.Document.ToolObjects = []
-            self.SelectedObjects = []
+            self.Canvas.Document.SelectedObjects = []
             
         # after all reftesh the canvas
         self.Canvas.Refresh()
@@ -113,14 +113,16 @@ class Tool():
         event.Skip()
     
     def OnKeyDown(self,event):
-        
         keycode = event.GetKeyCode()
-        if keycode == wx.WXK_TAB:            
-            #check the visibility of the panel..
-            if wx.GetApp().Frame.Properties.IsShown(): 
+        if keycode == wx.WXK_TAB:
+                
+            #check the visibility of the panel
+            if  wx.GetApp().Frame.Properties.IsShown(): 
                 wx.GetApp().Frame.Properties.Hide()
+                wx.GetApp().Frame.Layout()
             else:
                 wx.GetApp().Frame.Properties.Show()
+                wx.GetApp().Frame.Layout()
                 
                 
     def OnKeyUp(self,event): event.Skip()
