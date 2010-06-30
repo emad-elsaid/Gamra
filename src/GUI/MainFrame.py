@@ -58,10 +58,9 @@ class MainFrame(wx.Frame):
         
         #====== TODO: the properties table
         self.Properties = wx.Panel( self, size=(0,100) )
-        self.Properties.SetBackgroundColour("blue")
         box.Add(self.Properties, 0, wx.EXPAND | wx.ALL)
         
-        c = ColourPickerWidget(self.Properties,-1,wx.Color(20,20,50))
+        c = ColourPickerWidget(self.Properties,-1,(1,0,0,1))
         
         #connecting functions with actions
         wx.EVT_MENU(self, wx.ID_EXIT, self.OnExit)

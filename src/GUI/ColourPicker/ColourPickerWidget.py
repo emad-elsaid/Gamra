@@ -132,20 +132,16 @@ class ColourPickerWidget(wx.Button):
     A Widget that shows a panel contains an image which 
     resembles a palette of colors the user can choose from. 
   '''
-    def __init__(self, parent, id, colour, pos = wx.DefaultPosition,  size = wx.DefaultSize, 
-       style = 0, validator = wx.DefaultValidator, name = "button"):
-        #wx.Control.__init__(self, parent, id, pos, size)
+    def __init__(self, parent, id, colour, pos = wx.DefaultPosition,  size = (25,25), 
+       style=0, validator = wx.DefaultValidator, name = "button"):
         wx.Button.__init__(self, parent, id, wx.EmptyString, pos, size, style, validator, name)
-        #self.button = ColourPickerButton(parent, id, pos, size)
         self.Show(True)
         
         self.bmpImage = wx.Bitmap("data/palettes/colorcube.gif", wx.BITMAP_TYPE_GIF)
-        #buttonPosTuple = self.GetScreenPositionTuple()
         self.popupWindow = wx.PopupTransientWindow(parent)
         self.popupWindow.SetAutoLayout(True)
         self.panel = ColourPickerPanel(self.popupWindow, self.bmpImage, id, wx.DefaultPosition
                 ,wx.TAB_TRAVERSAL)
-        #self.popupWindow.Position((buttonPosTuple[0] , buttonPosTuple[1] - self.bmpImage.GetHeight() - 27), self.panel.GetSize())
         self.popupWindow.Dismiss()
         self.panel.GetSizer().Fit(self.popupWindow)
         self.panel.Show(True)
@@ -154,11 +150,15 @@ class ColourPickerWidget(wx.Button):
         self.Bind(wx.EVT_BUTTON, self.OnClickButton) 
        
     def SetColour(self, colour):
+        if colour.__class__!=wx.Colour:
+            colour = wx.Color(colour[0]*255,colour[1]*255,colour[2]*255,colour[3]*255)
         self.panel.SetColour(colour)
         self.SetBackgroundColour(colour)
+        
     def GetColour(self):
-        colour =  self.panel.GetColour()
-        return colour.Get(True)
+        colour =  self.panel.GetColour().Get(True)
+        colour = (colour[0]/255.0,colour[1]/255.0,colour[2]/255.0,colour[3]/255.0)
+        return colour
     
     def OnClickButton(self, event):
         '''
