@@ -48,6 +48,9 @@ class Tool():
         
         self.Canvas.Unbind(wx.EVT_MOUSEWHEEL)
         self.Canvas.Unbind(wx.EVT_PAINT)
+        
+        self.Canvas.Document.ToolObjects = []
+        self.Canvas.Refresh()
     
     def OnMouseLeftDown(self,event): 
         
@@ -107,8 +110,7 @@ class Tool():
                 
         wx.GetApp().Frame.SetStatusText(
                         'Current Position:'+str(self.Canvas.Document.Mouse)+
-                        ', Zoom : '+str(self.Canvas.Document.Zoom*100)+'%'+
-                        ', Clipping :'+str(self.Canvas.Document.Clip)
+                        ', Zoom : '+str(self.Canvas.Document.Zoom*100)+'%'
                         )
         event.Skip()
     
