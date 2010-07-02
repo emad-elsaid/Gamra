@@ -181,14 +181,18 @@ class Document:
         self.Border.Stroke.Width = 2
         self.Border.Antialias = cairo.ANTIALIAS_NONE
        
-    def GetUnderPixel(self,pixel,returnList=False):
+    def GetUnderPixel(self,pixel,returnList=False,objects=None):
         ctx = cairo.Context(cairo.ImageSurface(cairo.FORMAT_ARGB32,0,0))
         
-        revObjects = self.Objects[:]
-        revObjects.reverse()
+        if objects==None :
+            objects = self.Objects[:]
+        else:
+            objects = objects[:]
+            
+        objects.reverse()
         
         result = []
-        for i in revObjects:
+        for i in objects:
             i.Apply(ctx)
             if ctx.in_fill(pixel[0],pixel[1]) or ctx.in_stroke(pixel[0],pixel[1]) :
                 if returnList :
