@@ -15,6 +15,7 @@ class Scale(EditingTool):
 
     def __init__(self):
         EditingTool.__init__(self,name='Scale', icon='scale.png')
+        self.SelectedNode = None
         
     def Activate(self,canvas):
         doc = canvas.Document
@@ -36,6 +37,24 @@ class Scale(EditingTool):
         
     def OnMouseLeftDown(self,event):
         underMouse = self.Canvas.Document.GetUnderPixel(self.Canvas.Document.Mouse, objects=self.Canvas.Document.ToolObjects)
-        
+        if underMouse!=None :
+            self.SelectedNode = underMouse
+            self.startPosition = self.Canvas.Document.Mouse
+        else:
+            self.SelectedNode = None
+            self.startPosition = None
         EditingTool.OnMouseLeftDown(self, event)
+        
+    def OnMouseMove(self,event):
+        if event.Dragging() and event.LeftIsDown() and self.SelectedNode != None  :
+            delta = [self.Canvas.Document.Mouse[0]-self.startPosition[0],
+                     self.Canvas.Document.Mouse[1]-self.startPosition[1]]
+            for i in self.SelectedNode.Path.Points:
+                i[1][0] += delta[0]
+                i[1][1] += delta[1]
+                
+            self.startPosition = self.Canvas.Document.Mouse
+            self.Canvas.Refresh()
+        EditingTool.OnMouseMove(self, event)
+        
         
