@@ -11,10 +11,11 @@ class Tool():
     '''
     the parent of all tools here
     '''
-    def __init__(self, name='tool', icon='tool.png'):
+    def __init__(self, name='tool', icon='tool.png', Priority = 0):
         self.Name = name
         self.Icon = icon
-            
+        self.Priority = Priority
+    
     def Activate(self,canvas):
         self.Canvas = canvas
         self.Canvas.Bind(wx.EVT_LEFT_DOWN, self.OnMouseLeftDown)
