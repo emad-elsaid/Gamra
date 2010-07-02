@@ -130,6 +130,11 @@ class Rectangle(Object):
         self.Path.add1(x, y+h)
         self.Path.Closed = True
         
+class ControlPoint(Rectangle):
+    def __init__(self,x,y):
+        Rectangle.__init__(self,x-2,y-2,4,4)
+        self.Antialias = cairo.ANTIALIAS_NONE
+        
     
 class MetaData:
     '''
