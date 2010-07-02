@@ -31,7 +31,7 @@ class ObjectPanel(Generic):
         
         
         self.rightSizer.Add(g)
-        self.rightSizer.Fit(self)
+        self.mainSizer.SetSizeHints(self)
         self.Show()
            
          
@@ -43,6 +43,7 @@ if __name__ == '__main__':
     
     frame = wx.Frame(None)
     panel = ObjectPanel(frame)
+    panel.SetBackgroundColour("red")
     panel.Show()
     #frame.AutoLayout = True
     frame.Show(True)
