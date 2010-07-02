@@ -17,8 +17,13 @@ class EditorPanel(wx.Panel):
         #======Temporary List to construct the objects in====#
         editorsList = [] 
         
+        #add a tuple that contains the priority of the object and the object itself in editorsList
         for editor in Editor.__all__:
-            eval( 'editorsList.append('+editor+'.'+editor+'(self))' )
+            tempEditorObject = eval(editor+'.'+editor+'(self)')
+            eval( 'editorsList.append((tempEditorObject.Priority, tempEditorObject))' )
+        
+        #======Sort the editorsList in descending order according to the priority
+        editorsList.sort(reverse = True)
         
         #=======Making the list of objects that will going to be used from outside the class======#
         self.Editors = []
@@ -26,11 +31,11 @@ class EditorPanel(wx.Panel):
         
         #Adding the editor objects to sizer side by side 
         for editor in self.Editors:
-            self.mainSizer.Add(editor, 0, wx.EXPAND)
+            self.mainSizer.Add(editor[1], 0, wx.EXPAND)
         
         self.mainSizer.Fit(self)
         self.SetSizer(self.mainSizer)
-        
+    
     
     def Refresh(self, canvas):
         #Deactivate all editors then activate it
