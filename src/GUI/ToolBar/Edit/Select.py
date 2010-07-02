@@ -11,7 +11,7 @@ class Select(EditingTool):
     '''
     
     def __init__(self):
-        EditingTool.__init__(self,name='Select', icon='select.png')
+        EditingTool.__init__(self,name='Select', icon='select.png',Priority=1000)
     def OnMouseLeftDown(self,event): 
         
         selected = self.Canvas.Document.GetUnderPixel(self.Canvas.Document.Mouse)

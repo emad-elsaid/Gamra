@@ -130,10 +130,18 @@ class Rectangle(Object):
         self.Path.add1(x, y+h)
         self.Path.Closed = True
         
-class ControlPoint(Rectangle):
+class ControlPoint(Object):
     def __init__(self,x,y):
-        Rectangle.__init__(self,x-2,y-2,4,4)
-        self.Antialias = cairo.ANTIALIAS_NONE
+        Object.__init__(self)
+        self.Path.add1(x,y)
+        self.Antialiase = cairo.ANTIALIAS_NONE
+        
+    def Apply(self,ctx):
+        ctx.new_path()
+        ctx.rectangle(self.Path.Points[0][1][0]-2,self.Path.Points[0][1][1]-2,4,4)
+        self.Fill.Apply(ctx)
+        self.Stroke.Apply(ctx,False)
+        ctx.rectangle(self.Path.Points[0][1][0]-3,self.Path.Points[0][1][1]-3,6,6)
         
     
 class MetaData:
@@ -232,7 +240,7 @@ class Document:
                 r = i[0]
             if i[1]>b :
                 b = i[1]
-        return Rectangle(l-1,t-1,r-l+2,b-t+2)
+        return Rectangle(l,t,r-l,b-t)
         
     def DrawAll(self, ctx, list):
         for i in list:
