@@ -30,7 +30,7 @@ class EditorPanel(wx.Panel):
         
         self.mainSizer.Fit(self)
         self.SetSizer(self.mainSizer)
-    
+        
     
     def Refresh(self, canvas):
         #Deactivate all editors then activate it

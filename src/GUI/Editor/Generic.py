@@ -20,7 +20,6 @@ class Generic(wx.Panel):
         self.leftSizer = wx.BoxSizer(wx.VERTICAL)
         self.leftSizer.Add(staticBitmap, 0, wx.ALIGN_TOP | wx.ALIGN_CENTER)
         self.mainSizer.Add(self.leftSizer, 0)
-        self.mainSizer.SetSizeHints(self)
         self.SetSizer(self.mainSizer)
         self.Show(False)
         
