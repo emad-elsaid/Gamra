@@ -32,19 +32,3 @@ class ObjectPanel(Generic):
         
         self.rightSizer.Add(g)
         self.mainSizer.SetSizeHints(self)
-        self.Show()
-           
-         
-         
-    
-if __name__ == '__main__':
-    
-    app = wx.PySimpleApp()
-    
-    frame = wx.Frame(None)
-    panel = ObjectPanel(frame)
-    panel.SetBackgroundColour("red")
-    panel.Show()
-    #frame.AutoLayout = True
-    frame.Show(True)
-    app.MainLoop()
