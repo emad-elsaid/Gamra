@@ -26,10 +26,19 @@ class ToolBar(wx.ToolBar):
         #=========== loading all tools ==================
         #================================================
         #========== Making objects of Editing tools ===== 
-        editTools = []
+        tempEditTools = []
         for tool in Edit.__all__:
-            eval( 'editTools.append('+tool+'.'+tool+'())' )
-            
+            tempToolObject = eval(tool+'.'+tool+'()')
+            eval( 'tempEditTools.append((tempToolObject.Priority, tempToolObject))' )
+        
+        #Sort the tempEditTools by descending order
+        tempEditTools.sort(reverse = True)    
+        
+        editTools = []
+        #Adding the object from the tuple extracted from tempEditTools
+        for tool in tempEditTools:
+            editTools.append(tool[1])
+        
         #========== Making buttons of Editing tools =====
         for v in editTools:
             tool = self.AddRadioTool(-1,
