@@ -33,3 +33,9 @@ class Scale(EditingTool):
             doc.ToolObjects = [rect,self.lt,self.rt,self.rb,self.lb]
             
         EditingTool.Activate(self, canvas)
+        
+    def OnMouseLeftDown(self,event):
+        underMouse = self.Canvas.Document.GetUnderPixel(self.Canvas.Document.Mouse, objects=self.Canvas.Document.ToolObjects)
+        
+        EditingTool.OnMouseLeftDown(self, event)
+        
