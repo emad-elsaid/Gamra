@@ -102,10 +102,10 @@ class Scale(EditingTool):
             factor = [1,1]
             
             # check the delta if it's not zero then it's safe for division
-            if self.Origin[0]-self.startPosition[0] != 0 :
+            if self.Origin[0]-self.startPosition[0] != 0 and self.Canvas.Document.Mouse[0]!=self.Origin[0]:
                 factor[0] = float(self.Origin[0]-self.Canvas.Document.Mouse[0])/float(self.Origin[0]-self.startPosition[0])
                 
-            if self.Origin[1]-self.startPosition[1] != 0:
+            if self.Origin[1]-self.startPosition[1] != 0 and self.Canvas.Document.Mouse[1]!=self.Origin[1]:
                 factor[1] = float(self.Origin[1]-self.Canvas.Document.Mouse[1])/float(self.Origin[1]-self.startPosition[1])
             
             # if the scale from one side only then we
@@ -134,8 +134,21 @@ class Scale(EditingTool):
                         point[2][0] = (point[1][0]-self.Origin[0])*factor[0]+self.Origin[0]
                         point[2][1] = (point[1][1]-self.Origin[1])*factor[1]+self.Origin[1]
              
-            # update current mouse position 
-            self.startPosition = self.Canvas.Document.Mouse
+            '''
+            update current mouse position
+            that method of replacing the new position
+            will fix the bug of 0 width/height freezing
+            the problem was if i resize objects to 0 they'll 
+            be frozen and doesn't resize any more
+            '''
+            newpos = list(self.startPosition)
+            if self.Canvas.Document.Mouse[0]!=self.Origin[0] :
+                newpos[0] = self.Canvas.Document.Mouse[0]
+                
+            if self.Canvas.Document.Mouse[1]!=self.Origin[1] :
+                newpos[1] = self.Canvas.Document.Mouse[1]
+                
+            self.startPosition = tuple(newpos)
             # update canvas view
             self.Canvas.Refresh()
         EditingTool.OnMouseMove(self, event)
