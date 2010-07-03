@@ -44,7 +44,7 @@ class ToolBar(wx.ToolBar):
             tool = self.AddRadioTool(-1,
                      bitmap = wx.Bitmap( os.path.normpath("data/icons/"+v.Icon)), 
                      shortHelp = v.Name,
-                     longHelp = v.__doc__
+                     #longHelp = v.__doc__
                      )
             tool.ClientData = v
             self.Bind(wx.EVT_MENU, self.OnToolChange, tool)
