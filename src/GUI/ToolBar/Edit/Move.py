@@ -29,9 +29,11 @@ class Move(EditingTool):
         if event.Dragging() and event.LeftIsDown() and self.SelectedNode != None  :
             delta = [self.Canvas.Document.Mouse[0]-self.startPosition[0],
                      self.Canvas.Document.Mouse[1]-self.startPosition[1]]
-            for i in self.SelectedNode.Path.Points:
-                i[1][0] += delta[0]
-                i[1][1] += delta[1]
+                  #for each object move it's points
+            for obj in self.Canvas.Document.SelectedObjects:
+				for points in obj.Path.Points:
+					points[1][0] += delta[0]
+					points[1][1] += delta[1]
                 
             self.startPosition = self.Canvas.Document.Mouse
             self.Canvas.Refresh() #refresh the canvas for each move
