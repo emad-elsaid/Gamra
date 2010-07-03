@@ -138,6 +138,7 @@ class ControlPoint(Object):
         
     def Apply(self,ctx):
         ctx.new_path()
+        ctx.set_antialias(self.Antialias)
         ctx.rectangle(self.Path.Points[0][1][0]-2,self.Path.Points[0][1][1]-2,4,4)
         self.Fill.Apply(ctx)
         self.Stroke.Apply(ctx,False)
