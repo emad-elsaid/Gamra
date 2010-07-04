@@ -3,32 +3,34 @@ import wx
 
 
 class ObjectPanel(Generic):
-    def __init__(self,parent,id=wx.ID_ANY,pos=wx.DefaultPosition,size=wx.DefaultSize):
-        Generic.__init__(self, parent, id, pos, (200,200),"data/icons/photo.png", Priority=0)
+    def __init__(self,parent, id=wx.ID_ANY, pos=wx.DefaultPosition, size=wx.DefaultSize ):
+        
+        Generic.__init__(self, parent, id, pos, size,"data/icons/photo.png", Priority=0)
+        
         self.rightSizer = wx.BoxSizer(wx.VERTICAL)
-        self.rightSizer.Add(wx.StaticText(self,-1),0, wx.ALIGN_TOP | wx.ALIGN_CENTER)
-        self.mainSizer.AddSpacer(wx.Size(30, 30))
-        self.mainSizer.Add(self.rightSizer, 0)
-        self.rightSizer.AddSpacer(wx.Size(30, 30))
-        g = wx.FlexGridSizer(2,4,20,20)
+        
+        self.ObjectName = wx.StaticText(self)
+        self.rightSizer.Add(self.ObjectName,0, wx.ALIGN_TOP | wx.ALIGN_LEFT)
+        
+        g = wx.FlexGridSizer(2,4,3,3)
         s1 = wx.StaticText(self,-1,"X")
-        x = wx.TextCtrl(self,-1,"")
+        self.x = wx.TextCtrl(self)
         s2 = wx.StaticText(self,-1,"Y")
-        y = wx.TextCtrl(self,-1,"")
+        self.y = wx.TextCtrl(self)
         s3 = wx.StaticText(self,-1,"W")
-        w = wx.TextCtrl(self,-1,"")
+        self.w = wx.TextCtrl(self)
         s4 = wx.StaticText(self,-1,"H")
-        h = wx.TextCtrl(self,-1,"")
+        self.h = wx.TextCtrl(self)
         
         g.Add(s1)
-        g.Add(x)
+        g.Add(self.x)
         g.Add(s2)
-        g.Add(y)
+        g.Add(self.y)
         g.Add(s3)
-        g.Add(w)
+        g.Add(self.w)
         g.Add(s4)
-        g.Add(h)
+        g.Add(self.h)
         
-        
+        self.mainSizer.Add(self.rightSizer, 0)
         self.rightSizer.Add(g)
         self.mainSizer.SetSizeHints(self)
