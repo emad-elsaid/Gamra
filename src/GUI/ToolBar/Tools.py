@@ -96,52 +96,74 @@ class Tool():
                 wx.GetApp().Frame.Layout()
         
         elif keycode == wx.WXK_PAGEUP or keycode == wx.WXK_NUMPAD_PAGEUP:
-            self.Canvas.Document.SelectedObjects.reverse()
-            for SelectedObject in self.Canvas.Document.SelectedObjects:
-                if SelectedObject == self.Canvas.Document.Objects[len(self.Canvas.Document.Objects) -1 ]:
-                    return  
-                _index = self.Canvas.Document.Objects.index(SelectedObject)
-                _index += 1
-                self.Canvas.Document.Objects.remove(SelectedObject)
-                self.Canvas.Document.Objects.insert(_index, SelectedObject)
-            self.Canvas.Refresh()
+            self.OnPageUp()
         
         elif keycode == wx.WXK_PAGEDOWN or keycode == wx.WXK_NUMPAD_PAGEDOWN:
-            self.Canvas.Document.SelectedObjects.reverse()
-            for SelectedObject in self.Canvas.Document.SelectedObjects:
-                if SelectedObject == self.Canvas.Document.Objects[0]:
-                    return     
-                _index = self.Canvas.Document.Objects.index(SelectedObject)
-                _index -= 1
-                if _index < 0:
-                    _index = 0
-                self.Canvas.Document.Objects.remove(SelectedObject)
-                self.Canvas.Document.Objects.insert(_index, SelectedObject)
-            self.Canvas.Refresh()
+            self.OnPageDown()
         
         elif keycode == wx.WXK_HOME or keycode == wx.WXK_NUMPAD_HOME:
-            for SelectedObject in self.Canvas.Document.SelectedObjects:
-                self.Canvas.Document.SelectedObjects.reverse()
-                if SelectedObject == self.Canvas.Document.Objects[len(self.Canvas.Document.Objects) -1 ]:
-                    return
-            for SelectedObject in self.Canvas.Document.SelectedObjects:
-                self.Canvas.Document.Objects.remove(SelectedObject)
-                self.Canvas.Document.Objects.append(SelectedObject)
-            self.Canvas.Refresh()
+            self.OnHome()
             
         elif keycode == wx.WXK_END or keycode == wx.WXK_NUMPAD_END:
-            self.Canvas.Document.SelectedObjects.reverse()
-            for SelectedObject in self.Canvas.Document.SelectedObjects:
-                if SelectedObject == self.Canvas.Document.Objects[0]:
-                    return     
-            for SelectedObject in self.Canvas.Document.SelectedObjects:
-                self.Canvas.Document.Objects.remove(SelectedObject)
-            self.Canvas.Document.Objects[:0] = self.Canvas.Document.SelectedObjects
-            self.Canvas.Refresh()
+            self.OnEnd()
             
+        event.Skip()    
             
     
     def OnKeyUp(self,event): event.Skip()
+    
+    def OnPageUp(self):
+        for SelectedObject in self.Canvas.Document.SelectedObjects:
+            if SelectedObject == self.Canvas.Document.Objects[-1]:
+                return
+
+        elements = [ (self.Canvas.Document.Objects.index(i),i) for i in self.Canvas.Document.SelectedObjects ]
+        elements.sort(reverse=True)
+        
+        for index,SelectedObject in elements:
+            self.Canvas.Document.Objects.remove(SelectedObject)
+            self.Canvas.Document.Objects.insert(index+1, SelectedObject)
+        self.Canvas.Refresh()
+            
+    def OnPageDown(self):
+        for SelectedObject in self.Canvas.Document.SelectedObjects:
+            if SelectedObject == self.Canvas.Document.Objects[0]:
+                return
+                
+        elements = [ (self.Canvas.Document.Objects.index(i),i) for i in self.Canvas.Document.SelectedObjects ]
+        elements.sort()
+        
+        for index,SelectedObject in elements:
+            self.Canvas.Document.Objects.remove(SelectedObject)
+            self.Canvas.Document.Objects.insert(index-1, SelectedObject)
+        self.Canvas.Refresh()
+        
+    def OnHome(self):
+        for SelectedObject in self.Canvas.Document.SelectedObjects:
+            if SelectedObject == self.Canvas.Document.Objects[-1]:
+                return
+        
+        elements = [ (self.Canvas.Document.Objects.index(i),i) for i in self.Canvas.Document.SelectedObjects ]
+        elements.sort()
+            
+        for index,SelectedObject in elements:
+            self.Canvas.Document.Objects.remove(SelectedObject)
+            self.Canvas.Document.Objects.append(SelectedObject)
+        self.Canvas.Refresh()
+     
+    def OnEnd(self):
+        for SelectedObject in self.Canvas.Document.SelectedObjects:
+            if SelectedObject == self.Canvas.Document.Objects[0]:
+                return     
+        
+        elements = [ (self.Canvas.Document.Objects.index(i),i) for i in self.Canvas.Document.SelectedObjects ]
+        elements.sort(reverse=True)
+            
+        for index,SelectedObject in elements:
+            self.Canvas.Document.Objects.remove(SelectedObject)
+            self.Canvas.Document.Objects.insert(0,SelectedObject)
+        self.Canvas.Refresh()   
+    
     
     def OnWheel(self,event):
         if(event.GetWheelRotation()>0):
