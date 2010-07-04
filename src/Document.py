@@ -125,10 +125,19 @@ class Rectangle(Object):
     def __init__(self,x,y,w,h):
         Object.__init__(self)
         self.Path.add1(x, y)
-        self.Path.add1(x+w, y)
+        #self.Path.add1(x+w, y)
         self.Path.add1(x+w, y+h)
-        self.Path.add1(x, y+h)
-        self.Path.Closed = True
+        #self.Path.add1(x, y+h)
+        #self.Path.Closed = True
+    def Apply(self,ctx):
+        ctx.new_path()
+        ctx.set_antialias(self.Antialias)
+        ctx.rectangle(self.Path.Points[0][1][0],self.Path.Points[0][1][1],
+                      self.Path.Points[1][1][0]-self.Path.Points[0][1][0],
+                      self.Path.Points[1][1][1]-self.Path.Points[0][1][1])
+        self.Fill.Apply(ctx)
+        self.Stroke.Apply(ctx)
+        
         
 class ControlPoint(Object):
     def __init__(self,x,y):

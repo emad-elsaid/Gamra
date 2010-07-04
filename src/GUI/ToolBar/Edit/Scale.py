@@ -35,17 +35,17 @@ class Scale(EditingTool):
             #control points
             # l,r,t,b : left,right,top,bottom respectvly
             self.lt = Document.ControlPoint(rect.Path.Points[0][1][0],rect.Path.Points[0][1][1])
-            self.rt = Document.ControlPoint(rect.Path.Points[2][1][0],rect.Path.Points[0][1][1])
-            self.rb = Document.ControlPoint(rect.Path.Points[2][1][0],rect.Path.Points[2][1][1])
-            self.lb = Document.ControlPoint(rect.Path.Points[0][1][0],rect.Path.Points[2][1][1])
-            self.t  = Document.ControlPoint((rect.Path.Points[0][1][0]+rect.Path.Points[2][1][0])/2.0
+            self.rt = Document.ControlPoint(rect.Path.Points[1][1][0],rect.Path.Points[0][1][1])
+            self.rb = Document.ControlPoint(rect.Path.Points[1][1][0],rect.Path.Points[1][1][1])
+            self.lb = Document.ControlPoint(rect.Path.Points[0][1][0],rect.Path.Points[1][1][1])
+            self.t  = Document.ControlPoint((rect.Path.Points[0][1][0]+rect.Path.Points[1][1][0])/2.0
                                             ,rect.Path.Points[0][1][1])
-            self.b  = Document.ControlPoint((rect.Path.Points[0][1][0]+rect.Path.Points[2][1][0])/2.0
-                                            ,rect.Path.Points[2][1][1])
+            self.b  = Document.ControlPoint((rect.Path.Points[0][1][0]+rect.Path.Points[1][1][0])/2.0
+                                            ,rect.Path.Points[1][1][1])
             self.l  = Document.ControlPoint(rect.Path.Points[0][1][0],
-                                            (rect.Path.Points[0][1][1]+rect.Path.Points[2][1][1])/2.0)
-            self.r  = Document.ControlPoint(rect.Path.Points[2][1][0],
-                                            (rect.Path.Points[0][1][1]+rect.Path.Points[2][1][1])/2.0)
+                                            (rect.Path.Points[0][1][1]+rect.Path.Points[1][1][1])/2.0)
+            self.r  = Document.ControlPoint(rect.Path.Points[1][1][0],
+                                            (rect.Path.Points[0][1][1]+rect.Path.Points[1][1][1])/2.0)
             self.Rect = rect
             
             # add control points to the toolObjects list 
