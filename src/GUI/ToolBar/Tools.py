@@ -94,8 +94,65 @@ class Tool():
             else:
                 wx.GetApp().Frame.Properties.Show()
                 wx.GetApp().Frame.Layout()
+        
+        elif keycode == wx.WXK_PAGEUP or keycode == wx.WXK_NUMPAD_PAGEUP:
+                positionList = []
                 
+                for SelectedObject in self.Canvas.Document.SelectedObjects:
+                    positionList.append(self.Canvas.Document.Objects.index(SelectedObject))
+                    
+                for SelectedObject in self.Canvas.Document.SelectedObjects:
+                    self.Canvas.Document.Objects.remove(SelectedObject)
                 
+                j = 0
+                for i in range(len(positionList)):
+                    positionList[i] += 1
+                    self.Canvas.Document.Objects.insert(positionList[i], self.Canvas.Document.SelectedObjects[j]) 
+                    j += 1
+                self.Canvas.Refresh()
+        
+        elif keycode == wx.WXK_PAGEDOWN or keycode == wx.WXK_NUMPAD_PAGEDOWN:
+            positionList = []
+                
+            for SelectedObject in self.Canvas.Document.SelectedObjects:
+                positionList.append(self.Canvas.Document.Objects.index(SelectedObject))
+                self.Canvas.Document.Objects.remove(SelectedObject)
+            
+            j = 0    
+            for i in range(len(positionList)):
+                positionList[i] -= 1
+                if positionList[i] < 0:
+                    positionList[i] = 0
+                self.Canvas.Document.Objects.insert(positionList[i], self.Canvas.Document.SelectedObjects[j]) 
+                j += 1
+                
+            self.Canvas.Refresh()
+        
+        elif keycode == wx.WXK_HOME or keycode == wx.WXK_NUMPAD_HOME:
+            self.__Push(self.Canvas.Document.Objects, self.Canvas.Document.SelectedObjects, True)
+            self.Canvas.Refresh()
+            
+        elif keycode == wx.WXK_END or keycode == wx.WXK_NUMPAD_END:
+            self.__Push(self.Canvas.Document.Objects, self.Canvas.Document.SelectedObjects, False)
+            self.Canvas.Refresh()
+            
+            
+    def __Push(self, ObjectList, SelectedObjectsList, flag = True):
+        '''
+        A private Method that push the SelectedObjectsLists to the ObjectList according to the flag.
+        @param flag if True then push the SelectedObjectsList elements to the front of the ObjectList
+        else push the SelectedObjectsList to the bottom of the ObjectsList
+        '''
+        if flag:
+            for SelectedObject in SelectedObjectsList:
+                ObjectList.remove(SelectedObject)
+            ObjectList.extend(SelectedObjectsList)
+        else:
+            for SelectedObject in SelectedObjectsList:
+                ObjectList.remove(SelectedObject)
+            ObjectList[:0] = SelectedObjectsList
+            
+        
     def OnKeyUp(self,event): event.Skip()
     
     def OnWheel(self,event):
