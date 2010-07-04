@@ -96,6 +96,7 @@ class Tool():
                 wx.GetApp().Frame.Layout()
         
         elif keycode == wx.WXK_PAGEUP or keycode == wx.WXK_NUMPAD_PAGEUP:
+            self.Canvas.Document.SelectedObjects.reverse()
             for SelectedObject in self.Canvas.Document.SelectedObjects:
                 if SelectedObject == self.Canvas.Document.Objects[len(self.Canvas.Document.Objects) -1 ]:
                     return  
@@ -106,6 +107,7 @@ class Tool():
             self.Canvas.Refresh()
         
         elif keycode == wx.WXK_PAGEDOWN or keycode == wx.WXK_NUMPAD_PAGEDOWN:
+            self.Canvas.Document.SelectedObjects.reverse()
             for SelectedObject in self.Canvas.Document.SelectedObjects:
                 if SelectedObject == self.Canvas.Document.Objects[0]:
                     return     
@@ -119,14 +121,16 @@ class Tool():
         
         elif keycode == wx.WXK_HOME or keycode == wx.WXK_NUMPAD_HOME:
             for SelectedObject in self.Canvas.Document.SelectedObjects:
+                self.Canvas.Document.SelectedObjects.reverse()
                 if SelectedObject == self.Canvas.Document.Objects[len(self.Canvas.Document.Objects) -1 ]:
                     return
             for SelectedObject in self.Canvas.Document.SelectedObjects:
                 self.Canvas.Document.Objects.remove(SelectedObject)
-            self.Canvas.Document.Objects.extend(self.Canvas.Document.SelectedObjects)
+                self.Canvas.Document.Objects.append(SelectedObject)
             self.Canvas.Refresh()
             
         elif keycode == wx.WXK_END or keycode == wx.WXK_NUMPAD_END:
+            self.Canvas.Document.SelectedObjects.reverse()
             for SelectedObject in self.Canvas.Document.SelectedObjects:
                 if SelectedObject == self.Canvas.Document.Objects[0]:
                     return     
