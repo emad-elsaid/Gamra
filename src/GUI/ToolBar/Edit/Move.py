@@ -18,13 +18,14 @@ class Move(EditingTool):
     def Activate(self,canvas):
        
            # Create the boundary box
-           rect = canvas.Document.GetRect(canvas.Document.SelectedObjects)
-           rect.Antialiase = cairo.ANTIALIAS_NONE
-           rect.Fill.Color = (0,0,0,0)
-           rect.Stroke.Dash = [1,1]
-           # make it the only tools objects in canvas
-           # tool objects are rendered over the canvas
-           canvas.Document.ToolObjects = [rect]
+           if len(canvas.Document.SelectedObjects)>0 :
+               rect = canvas.Document.GetRect(canvas.Document.SelectedObjects)
+               rect.Antialiase = cairo.ANTIALIAS_NONE
+               rect.Fill.Color = (0,0,0,0)
+               rect.Stroke.Dash = [1,1]
+               # make it the only tools objects in canvas
+               # tool objects are rendered over the canvas
+               canvas.Document.ToolObjects = [rect]
            EditingTool.Activate(self, canvas)
         
 
@@ -57,8 +58,14 @@ class Move(EditingTool):
             #for each object move it's points
             for obj in self.Canvas.Document.SelectedObjects:
                 for points in obj.Path.Points:
+                    if points[0]!=None :
+                        points[0][0] += delta[0]
+                        points[0][1] += delta[1]
                     points[1][0] += delta[0]
                     points[1][1] += delta[1]
+                    if points[2]!=None :
+                        points[2][0] += delta[0]
+                        points[2][1] += delta[1]
                 
             self.startPosition = self.Canvas.Document.Mouse
             self.Canvas.Refresh() #refresh the canvas for each move
