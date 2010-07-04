@@ -44,3 +44,4 @@ class EditorPanel(wx.Panel):
         
         for editor in self.Editors:
             editor.Activate(canvas)
+        wx.Panel.Refresh()
