@@ -26,12 +26,11 @@ class EditorPanel(wx.Panel):
         editorsList.sort(reverse = True)
         
         #=======Making the list of objects that will going to be used from outside the class======#
-        self.Editors = []
-        self.Editors.extend(editorsList)
+        self.Editors = [ element for index,element in editorsList ]
         
         #Adding the editor objects to sizer side by side 
         for editor in self.Editors:
-            self.mainSizer.Add(editor[1], 0, wx.EXPAND)
+            self.mainSizer.Add(editor, 0, wx.EXPAND)
         
         self.mainSizer.Fit(self)
         self.SetSizer(self.mainSizer)
@@ -44,4 +43,4 @@ class EditorPanel(wx.Panel):
         
         for editor in self.Editors:
             editor.Activate(canvas)
-        wx.Panel.Refresh()
+        wx.Panel.Refresh(self)
