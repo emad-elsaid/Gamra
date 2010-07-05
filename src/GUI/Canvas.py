@@ -12,7 +12,7 @@ class Canvas(wx.Panel):
     abstract the operations of
     draw, scroll, resize,...etc
     '''
-    def __init__(self, parent, size):
+    def __init__(self, parent ):
         wx.Panel.__init__(self, parent, -1,style=wx.FULL_REPAINT_ON_RESIZE)
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
-        self.Document = Document.Document(size[0], size[1])
+        self.Document = Document.Document(500, 500)

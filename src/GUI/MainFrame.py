@@ -9,7 +9,6 @@ import Canvas
 import AboutBox
 from EditorPanel import EditorPanel
 from ToolBar import ToolBar
-from GUI.ColourPicker.ColourPickerWidget import ColourPickerWidget
 
 class MainFrame(wx.Frame):
     
@@ -17,9 +16,6 @@ class MainFrame(wx.Frame):
                  size = wx.DefaultSize, style = wx.DEFAULT_FRAME_STYLE):
         
         wx.Frame.__init__(self, parent, id, title,pos, size)
-        
-        #============= Creating statusbar
-        self.CreateStatusBar()
         
         #============= Creating About Box
         self.About = AboutBox.AboutBox()
@@ -39,16 +35,18 @@ class MainFrame(wx.Frame):
         menuBar.Append(help_menu, "&Help")
         self.MenuBar = menuBar
         
+        #connecting functions with actions
+        wx.EVT_MENU(self, wx.ID_EXIT, self.OnExit)
+        wx.EVT_MENU(self, wx.ID_ABOUT, self.OnAbout)
+        
         #=================================================
         #======= Making Main layout of the window ========
         #=================================================
         box = wx.BoxSizer(wx.VERTICAL)
-        self.SetAutoLayout(True)
         self.SetSizer(box)
-        self.Layout()
         
         #=============== Creating Canvas =================
-        self.Canvas = Canvas.Canvas( self, size=(1000,1000) )  
+        self.Canvas = Canvas.Canvas( self )  
         box.Add(self.Canvas, 10, wx.EXPAND | wx.ALL)
         
         #=============== Creating Toolbar =================
@@ -57,14 +55,12 @@ class MainFrame(wx.Frame):
         #make Horizontal factor resizable 
         box.Add(tb, 0, wx.EXPAND | wx.ALL)
         
-        #====== TODO: the properties table
         self.Properties = EditorPanel(self, size = wx.Size(0, 100))
         box.Add(self.Properties, 0, wx.EXPAND | wx.ALL)
-                
-        #connecting functions with actions
-        wx.EVT_MENU(self, wx.ID_EXIT, self.OnExit)
-        wx.EVT_MENU(self, wx.ID_ABOUT, self.OnAbout)
-                
+        
+        #============= Creating statusbar
+        self.CreateStatusBar()
+        
     def OnExit(self, event):
         self.Close(True)
         
