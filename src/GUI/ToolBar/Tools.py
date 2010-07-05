@@ -106,7 +106,23 @@ class Tool():
             
         elif keycode == wx.WXK_END or keycode == wx.WXK_NUMPAD_END:
             self.OnEnd()
+        
+        elif  keycode == wx.WXK_DELETE or keycode == wx.WXK_NUMPAD_DELETE:
+            for SelectedObject in self.Canvas.Document.SelectedObjects:
+                self.Canvas.Document.Objects.remove(SelectedObject)
             
+            del self.Canvas.Document.SelectedObjects[:]
+            self.Canvas.Refresh()
+        
+        elif keycode == 49 or keycode == wx.WXK_NUMPAD1:
+            self.Canvas.Document.Zoom = 1
+            self.Canvas.Refresh()
+            self.Canvas.Document.Clip[0] = 500
+            self.Canvas.Document.Clip[1] = 500
+        
+        elif keycode == 50 or keycode == wx.WXK_NUMPAD2:
+            pass
+        
         event.Skip()    
             
     
