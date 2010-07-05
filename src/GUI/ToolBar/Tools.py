@@ -115,11 +115,17 @@ class Tool():
             self.Canvas.Refresh()
         
         elif keycode == 49 or keycode == wx.WXK_NUMPAD1:
+            if self.Canvas.Document.Zoom == 1:
+                return
+            
             self.Canvas.Document.Zoom = 1
             self.Canvas.Refresh()
-            self.Canvas.Document.Clip[0] = 500
-            self.Canvas.Document.Clip[1] = 500
-        
+            canvasCenter = ( self.Canvas.GetSizeTuple()[0] / 2, self.Canvas.GetSizeTuple()[1] / 2)
+            documentCenter = (self.Canvas.Document.Width / 2, self.Canvas.Document.Height / 2)
+            self.Canvas.Document.Clip[0] = -abs(canvasCenter[0] - documentCenter[0])
+            self.Canvas.Document.Clip[1] = abs(canvasCenter[1] - documentCenter[1])
+            
+            
         elif keycode == 50 or keycode == wx.WXK_NUMPAD2:
             pass
         
