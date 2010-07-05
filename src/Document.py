@@ -234,6 +234,9 @@ class Document:
         self.DrawAll(ctx, self.ToolObjects)
         
     def GetRect(self, Objects ):
+        if len(Objects)==0 :
+            return Rectangle(0,0,0,0)
+        
         path = []
         for i in Objects:
             for point in i.Path.Points:

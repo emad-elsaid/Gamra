@@ -12,8 +12,14 @@ class Select(EditingTool):
     
     def __init__(self):
         EditingTool.__init__(self,name='Select', icon='select.png',Priority=1000)
-    def OnMouseLeftDown(self,event): 
         
+    def Activate(self,canvas):
+        # after all reftesh the canvas
+        self.Canvas = canvas
+        self.CreateBoundary()
+        EditingTool.Activate(self, canvas)
+        
+    def OnMouseLeftDown(self,event):
         selected = self.Canvas.Document.GetUnderPixel(self.Canvas.Document.Mouse)
         # check if there is something selected
         if( selected!=None ):
@@ -28,19 +34,24 @@ class Select(EditingTool):
             #if shift is not down, the selection will be only the object
             else:
                 self.Canvas.Document.SelectedObjects = [selected]
-                
-            # create the highlight rectangle around selected objects 
-            highlight = self.Canvas.Document.GetRect(self.Canvas.Document.SelectedObjects)
-            highlight.Stroke.Dash = [5,5]
-            highlight.Fill.Color = (0,0,0,0)
-            highlight.Antialiase = cairo.ANTIALIAS_NONE
-            self.Canvas.Document.ToolObjects = [highlight]
-            
-        # if nothing clicked then clear the toolobjects and the selected objects
+                # if nothing clicked then clear the toolobjects and the selected objects
         else:
             self.Canvas.Document.ToolObjects = []
             self.Canvas.Document.SelectedObjects = []
-            
         # after all reftesh the canvas
+        self.CreateBoundary()
+        EditingTool.OnMouseLeftDown(self, event)
+        
+    
+    def OnKeyUp(self,event):
+        self.CreateBoundary()
+        EditingTool.OnMouseLeftDown(self, event)
+    
+    def CreateBoundary(self):
+        # create the highlight rectangle around selected objects 
+        highlight = self.Canvas.Document.GetRect(self.Canvas.Document.SelectedObjects)
+        highlight.Stroke.Dash = [5,5]
+        highlight.Fill.Color = (0,0,0,0)
+        highlight.Antialiase = cairo.ANTIALIAS_NONE
+        self.Canvas.Document.ToolObjects = [highlight]
         self.Canvas.Refresh()
-        event.Skip()
