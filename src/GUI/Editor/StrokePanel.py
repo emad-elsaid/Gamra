@@ -7,9 +7,9 @@ import wx
 from GUI.Editor.Generic import Generic
 from GUI.ColourPicker import ColourPickerWidget
 
-class FillPanel(Generic):
+class StrokePanel(Generic):
     def __init__(self,parent):
-        Generic.__init__(self, parent, iconPath="data/icons/fill.png")
+        Generic.__init__(self, parent, iconPath="data/icons/pencil.png")
                 
         vertical = wx.BoxSizer(wx.VERTICAL)
         

@@ -31,13 +31,19 @@ class ObjectPanel(Generic):
         g.Add(s4)
         g.Add(self.h)
         
-        self.Show()
         self.mainSizer.Add(self.rightSizer, 0)
         self.rightSizer.Add(g)
         self.mainSizer.SetSizeHints(self)
         
     def Activate(self,canvas):
         if len(canvas.Document.SelectedObjects)==1 :
+            '''
+            selected = canvas.Document.SelectedObjects[0]
+            cls = str(selected.__class__).split("'")
+            cls = cls[1]
+            self.ObjectName.SetLabel(cls)
+            '''
             self.Show()
+            
         else:
             self.Hide()
