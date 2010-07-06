@@ -4,10 +4,20 @@ Created on Jun 4, 2010
 @author: Ahmed Ghanem
 '''
 import wx
-class Splash():
+class Splash(wx.Frame):
 	#============= Creating Gamra SplashSceen
-	def __init__(self, splashName, splashTime):
-		image = wx.Image(splashName)                                                 
-		bmpSplash = image.ConvertToBitmap() # convert image to bitmap
-		wx.SplashScreen(bmpSplash, wx.SPLASH_CENTRE_ON_SCREEN | 
-		wx.SPLASH_TIMEOUT, splashTime, None, -1)		
+	def __init__(self, splashTime):
+		wx.Frame.__init__( self, None, -1, style=wx.FRAME_NO_TASKBAR|wx.FRAME_NO_WINDOW_MENU)
+		
+		image = wx.Image("data/splash/splash.png").ConvertToBitmap()                                               
+		
+		wx.StaticBitmap(self,-1,image)
+		self.Fit()
+		self.CenterOnScreen()
+		
+		self.Show()
+		wx.Yield()
+		wx.Sleep(splashTime)
+		self.Hide()
+		self.Destroy()
+		

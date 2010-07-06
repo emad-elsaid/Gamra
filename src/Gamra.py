@@ -13,15 +13,16 @@ from GUI.Splash import Splash
 
 class Gamra(wx.App):
     def OnInit(self):
-        #commented because it hides hte menubar if enabled
-        #Splash("data/icons/splash.png",3000) #obj to show splash 3sec 
+
+        Splash(3)
         self.AppName = "Gamra"
         self.VendorName = "Schoolar Projects"
         self.Version = "0.1"
         
-        self.Frame = MainFrame(size=wx.Size(1000,600))
-        self.Frame.Show(True)
+        self.Frame = MainFrame(size=(1000,600))
         self.SetTopWindow(self.Frame)
+        self.Frame.Show()
+        
         return True
 
 

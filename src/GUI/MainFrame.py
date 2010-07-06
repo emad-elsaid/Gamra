@@ -61,6 +61,8 @@ class MainFrame(wx.Frame):
         #============= Creating statusbar
         self.CreateStatusBar()
         
+        self.Maximize()
+        
     def OnExit(self, event):
         self.Close(True)
         

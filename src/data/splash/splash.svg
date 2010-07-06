@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="562"
+   height="277"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="splash.svg"
+   inkscape:export-filename="/home/blaze/Projects/Gamra/src/data/splash/splash.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2830">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="0"
+         id="stop2832" />
+      <stop
+         style="stop-color:#999999;stop-opacity:1"
+         offset="1"
+         id="stop2834" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2818">
+      <stop
+         style="stop-color:#11002b;stop-opacity:1;"
+         offset="0"
+         id="stop2820" />
+      <stop
+         style="stop-color:#22002b;stop-opacity:1"
+         offset="1"
+         id="stop2822" />
+    </linearGradient>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2818"
+       id="linearGradient2824"
+       x1="147"
+       y1="374.36218"
+       x2="147"
+       y2="647.37866"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2830"
+       id="linearGradient2842"
+       gradientUnits="userSpaceOnUse"
+       x1="137"
+       y1="414.36218"
+       x2="137"
+       y2="463.49292"
+       gradientTransform="translate(-0.5,0.75)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2830"
+       id="linearGradient2850"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-0.5,0.75)"
+       x1="137"
+       y1="414.36218"
+       x2="137"
+       y2="463.49292" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="413.5"
+     inkscape:cy="134.19198"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="713"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-82,-370.36218)">
+    <rect
+       style="fill:url(#linearGradient2824);fill-opacity:1;stroke:none"
+       id="rect2816"
+       width="562"
+       height="277"
+       x="82"
+       y="370.36218" />
+    <g
+       id="g2844"
+       transform="matrix(0.75856648,0,0,0.75856648,33.3939,92.06167)">
+      <text
+         sodipodi:linespacing="125%"
+         id="text2826"
+         y="462.47314"
+         x="111.86459"
+         style="font-size:65.5429306px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;font-family:AvantGarde Md BT;-inkscape-font-specification:AvantGarde Md BT"
+         xml:space="preserve"><tspan
+           style="fill:#ffffff;fill-opacity:1;stroke:#ffffff"
+           y="462.47314"
+           x="111.86459"
+           id="tspan2828"
+           sodipodi:role="line">Gamra</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:65.5429306px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2850);fill-opacity:1;stroke:none;font-family:AvantGarde Md BT;-inkscape-font-specification:AvantGarde Md BT"
+         x="111.36459"
+         y="463.22314"
+         id="text2838"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan2840"
+           x="111.36459"
+           y="463.22314"
+           style="fill:url(#linearGradient2850);fill-opacity:1">Gamra</tspan></text>
+    </g>
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;opacity:0.5"
+       id="rect2854"
+       width="525"
+       height="1"
+       x="100.5"
+       y="611.36218" />
+    <text
+       xml:space="preserve"
+       style="font-size:15.52503967px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="99.027771"
+       y="622.90692"
+       id="text2856"><tspan
+         sodipodi:role="line"
+         id="tspan2858"
+         x="99.027771"
+         y="622.90692"
+         style="font-size:9px">Graphics application aims to help </tspan><tspan
+         sodipodi:role="line"
+         x="99.027771"
+         y="634.15692"
+         id="tspan2860"
+         style="font-size:9px">webdesigners to more productive creations</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16.74195671px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="531.09021"
+       y="606.69153"
+       id="text2862"><tspan
+         sodipodi:role="line"
+         id="tspan2864"
+         x="531.09021"
+         y="606.69153">version 0.1</tspan></text>
+  </g>
+</svg>
