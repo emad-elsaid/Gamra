@@ -37,13 +37,22 @@ class ObjectPanel(Generic):
         
     def Activate(self,canvas):
         if len(canvas.Document.SelectedObjects)==1 :
-            '''
-            selected = canvas.Document.SelectedObjects[0]
-            cls = str(selected.__class__).split("'")
-            cls = cls[1]
-            self.ObjectName.SetLabel(cls)
-            '''
             self.Show()
+            self.w.SetValue("%s" %(canvas.Document.SelectedObjects[0].Path.Points[1][1][0]-canvas.Document.SelectedObjects[0].Path.Points[0][1][0]))
+            self.h.SetValue("%s" %(canvas.Document.SelectedObjects[0].Path.Points[1][1][1]-canvas.Document.SelectedObjects[0].Path.Points[0][1][1]))
+            self.x.SetValue("%s" %(canvas.Document.SelectedObjects[0].Path.Points[0][1][0]))
+            self.y.SetValue("%s" %(canvas.Document.SelectedObjects[0].Path.Points[0][1][1]))
+        
+            
+            selected = canvas.Document.SelectedObjects[0]
+            cls = str(selected.__class__).split(".")
+            cls = cls[1]
+            self.ObjectName.SetLabel("     %s" % (cls))
+            
+            self.Show()
+             
+            
+            
             
         else:
             self.Hide()
