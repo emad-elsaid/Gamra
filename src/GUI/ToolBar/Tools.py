@@ -61,7 +61,10 @@ class Tool():
         
     def OnMouseRightDown(self,event): event.Skip()
     
-    def OnMouseLeftUp(self,event): event.Skip()
+    def OnMouseLeftUp(self,event): 
+        wx.GetApp().Frame.Properties.Refresh(wx.GetApp().Frame.Canvas)
+        event.Skip()
+
     
     def OnMouseMiddleUp(self,event): event.Skip()
         
