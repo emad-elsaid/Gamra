@@ -5,7 +5,7 @@ import wx
 class ObjectPanel(Generic):
     def __init__(self,parent, id=wx.ID_ANY, pos=wx.DefaultPosition, size=wx.DefaultSize ):
         
-        Generic.__init__(self, parent, id, pos, size,"data/icons/photo.png", Priority=0)
+        Generic.__init__(self, parent, id, pos, size,"data/icons/photo.png", Priority=1000)
         
         self.rightSizer = wx.BoxSizer(wx.VERTICAL)
         

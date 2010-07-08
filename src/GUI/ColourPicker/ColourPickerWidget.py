@@ -49,10 +49,9 @@ class ColourPickerPanel(wx.Panel):
         self.mainSizer.Fit(self)
         self.SetSizer(self.mainSizer)
         
-        #self.colourPanel = wx.Panel(self, wx.ID_ANY, (0, 0), (20, 15))
         self.image = self.bmpImage.ConvertToImage()
         self.colourTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.OnTextCtrl)
-        wx.EVT_LEFT_DOWN(self.staticBitmap, self.OnMouseDown)
+        wx.EVT_LEFT_UP(self.staticBitmap, self.OnMouseUp)
         self.colourChooserButton.Bind(wx.EVT_BUTTON, self.OnColourChooserButton)
         wx.EVT_MOTION(self.staticBitmap, self.OnMotion)
         
@@ -101,7 +100,7 @@ class ColourPickerPanel(wx.Panel):
             self.GetParent().Popup()
             return
         
-    def OnMouseDown(self, event):
+    def OnMouseUp(self, event):
         x, y = event.GetPosition()
         r = self.image.GetRed(x, y) 
         g = self.image.GetGreen(x, y)
