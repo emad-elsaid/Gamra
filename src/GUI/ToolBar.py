@@ -5,10 +5,10 @@ Created on Jun 10, 2010
 '''
 import os
 import wx
-import Edit
-import Vector
-from Edit import *
-from Vector import *
+from  GUI.Tools import Edit
+from  GUI.Tools import Vector
+from GUI.Tools.Edit import *
+from GUI.Tools.Vector import *
 
 class ToolBar(wx.ToolBar):
     '''

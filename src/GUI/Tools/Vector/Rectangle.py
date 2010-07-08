@@ -3,7 +3,7 @@ Created on Jul 7, 2010
 
 @author: blaze
 '''
-from GUI.ToolBar.Tools import VectorTool
+from GUI.Tools.Tools import VectorTool
 import Document
 
 class Rectangle(VectorTool):

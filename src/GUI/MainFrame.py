@@ -8,7 +8,8 @@ import os
 import Canvas
 import AboutBox
 from EditorPanel import EditorPanel
-from ToolBar import ToolBar
+import ToolBar
+from MenuBar import MenuBar
 
 class MainFrame(wx.Frame):
     
@@ -23,21 +24,10 @@ class MainFrame(wx.Frame):
         #============= Setting Frame Icon
         self.Icon = wx.Icon(os.path.normpath("data/icons/icon256.png"), wx.BITMAP_TYPE_PNG)
         
-        #============= Making Main Menu
-        file_menu = wx.Menu()
-        file_menu.Append(wx.ID_EXIT,"E&xit", "Terminate the program")
-
-        help_menu = wx.Menu()
-        help_menu.Append(wx.ID_ABOUT,"&About","More information about this program")
-        
-        menuBar = wx.MenuBar()
-        menuBar.Append(file_menu, "&File")
-        menuBar.Append(help_menu, "&Help")
-        self.MenuBar = menuBar
-        
-        #connecting functions with actions
-        wx.EVT_MENU(self, wx.ID_EXIT, self.OnExit)
-        wx.EVT_MENU(self, wx.ID_ABOUT, self.OnAbout)
+        #============= Making Main Menu        
+        self.MenuBar = MenuBar()
+        for event in self.MenuBar.Handlers :
+            wx.EVT_MENU(self, event[0], event[1])
         
         #=================================================
         #======= Making Main layout of the window ========
@@ -63,8 +53,5 @@ class MainFrame(wx.Frame):
         
         self.Maximize()
         
-    def OnExit(self, event):
-        self.Close(True)
         
-    def OnAbout(self, event):
-        self.About.Show()
+   

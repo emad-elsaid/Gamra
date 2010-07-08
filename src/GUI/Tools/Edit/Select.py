@@ -3,7 +3,7 @@ Created on Jun 10, 2010
 
 @author: blaze
 '''
-from GUI.ToolBar.Tools import EditingTool
+from GUI.Tools.Tools import EditingTool
 import cairo
 import wx
 import Document

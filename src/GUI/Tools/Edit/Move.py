@@ -3,7 +3,7 @@ Created on July 2, 2010
 
 @author: Ahmed Ghanem
 '''
-from GUI.ToolBar.Tools import EditingTool
+from GUI.Tools.Tools import EditingTool
 import cairo
 
 class Move(EditingTool):
