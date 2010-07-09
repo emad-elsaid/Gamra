@@ -14,7 +14,7 @@ from GUI.Splash import Splash
 class Gamra(wx.App):
     def OnInit(self):
 
-        Splash(3)
+        Splash(1)
         self.AppName = "Gamra"
         self.VendorName = "Schoolar Projects"
         self.Version = "0.1"

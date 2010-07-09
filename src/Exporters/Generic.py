@@ -20,16 +20,18 @@ class Generic(object):
         # the file extension of the exported file 
         self.Extension = extension 
         # the file path to export, this will be changed by a Prepare method
-        self.File = '' 
+        self.File = ''
        
     def Prepare(self):
-        frame = None#wx.GetApp().Frame
-        saveDLG = wx.FileDialog( frame, self.Label, self.Extension, style=wx.FD_SAVE )
+        frame = wx.GetApp().Frame
+        saveDLG = wx.FileDialog( frame, self.Label, wildcard=self.Mask, style=wx.FD_SAVE )
         
         if saveDLG.ShowModal()==wx.ID_OK :
             self.File = saveDLG.GetPath()
             if not self.File.endswith('.'+self.Extension) :
                 self.File += '.'+self.Extension
+                
+            self.File = str(self.File)
             return True
         else:
             return False
@@ -37,9 +39,10 @@ class Generic(object):
     def Export(self):
         pass
     
-    def Launch(self):
-        self.Prepare()
-        self.Export()
+    # i added *args because this function will be bind to event
+    def Launch(self, *args):
+        if self.Prepare() :
+            self.Export()
     
 if __name__ == '__main__':
     app = wx.App()

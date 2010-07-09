@@ -11,7 +11,7 @@ class About(wx.Menu):
         wx.Menu.__init__(self)
         self.Priority = 0
         self.Label = "Help"
-        self.Append(wx.ID_ABOUT, "E&xit", "Terminate the program")
+        self.Append(wx.ID_ABOUT, "About", "More Information about this application")
         self.Handlers = [[wx.ID_ABOUT,self.OnAbout]]
         
     def OnAbout(self, event):
