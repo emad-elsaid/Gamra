@@ -126,13 +126,13 @@ class Scale(EditingTool):
             for i in self.Canvas.Document.SelectedObjects :
                 for point in i.Path.Points :
                     if point[0] != None :
-                        point[0][0] = (point[1][0]-self.Origin[0])*factor[0]+self.Origin[0]
-                        point[0][1] = (point[1][1]-self.Origin[1])*factor[1]+self.Origin[1]
+                        point[0][0] = (point[0][0]-self.Origin[0])*factor[0]+self.Origin[0]
+                        point[0][1] = (point[0][1]-self.Origin[1])*factor[1]+self.Origin[1]
                     point[1][0] = (point[1][0]-self.Origin[0])*factor[0]+self.Origin[0]
                     point[1][1] = (point[1][1]-self.Origin[1])*factor[1]+self.Origin[1]
                     if point[2] != None :
-                        point[2][0] = (point[1][0]-self.Origin[0])*factor[0]+self.Origin[0]
-                        point[2][1] = (point[1][1]-self.Origin[1])*factor[1]+self.Origin[1]
+                        point[2][0] = (point[2][0]-self.Origin[0])*factor[0]+self.Origin[0]
+                        point[2][1] = (point[2][1]-self.Origin[1])*factor[1]+self.Origin[1]
              
             '''
             update current mouse position
