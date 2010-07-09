@@ -144,10 +144,7 @@ class Rectangle(Object):
     def __init__(self,x = 0,y = 0,w = 0,h = 0):
         Object.__init__(self)
         self.Path.add1(x, y)
-        #self.Path.add1(x+w, y)
         self.Path.add1(x+w, y+h)
-        #self.Path.add1(x, y+h)
-        #self.Path.Closed = True
     def Apply(self,ctx):
         ctx.new_path()
         ctx.set_antialias(self.Antialias)
@@ -291,7 +288,7 @@ class Document:
     def ToData(self): 
         serializedObjects = []
         for objects in self.Objects:
-             serializedObjects.append( (objects.__class__.__name__, objects.ToData()) )
+            serializedObjects.append( (objects.__class__.__name__, objects.ToData()) )
         return json.dumps( [self.MetaData.ToData(), serializedObjects, self.Width, self.Height, self.Clip
                             , self.Zoom], -1)
     
