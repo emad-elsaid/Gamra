@@ -9,6 +9,7 @@ Created on Jun 14, 2010
 '''
 import cairo
 from wx.lib.wxcairo import ContextFromDC
+import json
 
 class Path:
     def __init__(self):
@@ -50,9 +51,13 @@ class Path:
         
     def add3(self,h1x,h1y,x,y,h2x,h2y):
         self.Points.append([[h1x,h1y],[x,y],[h2x,h2y]])
+    
+    def ToData(self):
+        return json.dumps( [self.Points, self.Closed], -1)
+    
+    def FromData(self, data):
+        self.Points, self.Closed = json.loads(data)
         
-    def ToData(self): pass
-    def FromData(self, data): pass
 
 class Stroke:
     def __init__(self):
@@ -75,9 +80,12 @@ class Stroke:
         else:
             context.stroke()
         
+    def ToData(self): 
+        return json.dumps( [self.Width, self.Dash, self.DashOffset, self.Cap, self.Join, self.Color], -1)
+    
+    def FromData(self, data): 
+        self.Width, self.Dash, self.DashOffset, self.Cap, self.Join, self.Color = json.loads(data)
         
-    def ToData(self): pass
-    def FromData(self, data): pass
 
 class Fill:
     def __init__(self):
@@ -93,8 +101,12 @@ class Fill:
             context.fill()
         
         
-    def ToData(self): pass
-    def FromData(self, data): pass
+    def ToData(self): 
+        return json.dumps( [self.Rule, self.Color], -1)
+    
+    def FromData(self, data): 
+        self.Rule, self.Color = json.loads(data)
+        
     
 class Object:
     '''
@@ -118,11 +130,18 @@ class Object:
             self.Fill.Apply(context)
             self.Stroke.Apply(context)
             
-    def ToData(self): pass
-    def FromData(self, data): pass
+    def ToData(self): 
+        return json.dumps( [self.Path.ToData(), self.Stroke.ToData(), self.Antialias, self.Fill.ToData(), self.Visible
+                            , self.Locked], -1)
+    def FromData(self, data): 
+        tempPath, tempStroke, self.Antialias, tempFill, self.Visible, self.Locked = json.loads(data)
+        self.Path.FromData(tempPath)
+        self.Stroke.FromData(tempStroke)
+        self.Fill.FromData(tempFill) 
+        
        
 class Rectangle(Object):
-    def __init__(self,x,y,w,h):
+    def __init__(self,x = 0,y = 0,w = 0,h = 0):
         Object.__init__(self)
         self.Path.add1(x, y)
         #self.Path.add1(x+w, y)
@@ -137,8 +156,7 @@ class Rectangle(Object):
                       self.Path.Points[1][1][1]-self.Path.Points[0][1][1])
         self.Fill.Apply(ctx)
         self.Stroke.Apply(ctx)
-        
-        
+    
 class ControlPoint(Object):
     def __init__(self,x,y):
         Object.__init__(self)
@@ -167,19 +185,23 @@ class MetaData:
         self.Modified = ''
         self.Comment = ''
         
-    def ToData(self): pass
-    def FromData(self, data): pass
+    def ToData(self): 
+        return json.dumps( [self.Author, self.Created, self.Modified, self.Comment], -1)
+    
+    def FromData(self, data): 
+        self.Author, self.Created, self.Modified, self.Comment = json.loads(data)
+        
     
 class Document:
     '''
     Image main document
     '''
     def __init__(self,width,height):
-        self.MetaData = MetaData
-        
+        self.MetaData = MetaData()
         self.Objects = [Rectangle(5,5,100,100),
                         Rectangle(50,50,100,100),
-                        Rectangle(110,110,100,100),
+                        Rectangle(110,110,
+                        100,100),
                         Rectangle(150,150,100,100)]
         self.ToolObjects = []
         
@@ -266,7 +288,19 @@ class Document:
             return (int((pixel[0] + self.Clip[0])/self.Zoom),
                     int((pixel[1] + self.Clip[1])/self.Zoom))
           
-    def ToData(self): pass
-    def FromData(self, data): pass
+    def ToData(self): 
+        serializedObjects = []
+        for objects in self.Objects:
+             serializedObjects.append( (objects.__class__.__name__, objects.ToData()) )
+        return json.dumps( [self.MetaData.ToData(), serializedObjects, self.Width, self.Height, self.Clip
+                            , self.Zoom], -1)
     
+    def FromData(self, data):
+        metaData, tempObjects, self.Width, self.Height, self.Clip, self.Zoom = json.loads(data)
+        self.MetaData.FromData(metaData)
+        self.Objects = []
+        for objects in tempObjects:
+            x = eval(objects[0] + '()') 
+            x.FromData(objects[1])
+            self.Objects.append( x )
     
