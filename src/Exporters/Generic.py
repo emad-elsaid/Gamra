@@ -24,7 +24,7 @@ class Generic(object):
        
     def Prepare(self):
         frame = wx.GetApp().Frame
-        saveDLG = wx.FileDialog( frame, self.Label, wildcard=self.Mask, style=wx.FD_SAVE )
+        saveDLG = wx.FileDialog( frame, self.Label, wildcard=self.Mask, style=wx.FD_SAVE|wx.FD_OVERWRITE_PROMPT )
         
         if saveDLG.ShowModal()==wx.ID_OK :
             self.File = saveDLG.GetPath()

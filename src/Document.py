@@ -195,11 +195,7 @@ class Document:
     '''
     def __init__(self,width,height):
         self.MetaData = MetaData()
-        self.Objects = [Rectangle(5,5,100,100),
-                        Rectangle(50,50,100,100),
-                        Rectangle(110,110,
-                        100,100),
-                        Rectangle(150,150,100,100)]
+        self.Objects = []
         self.ToolObjects = []
         
         self.SelectedObjects = []
