@@ -16,7 +16,22 @@ class Select(EditingTool):
     
     def __init__(self):
         EditingTool.__init__(self,name='Select', icon='select.png',Priority=1000)
+        
+    def Activate(self,canvas):
+        EditingTool.Activate(self, canvas)
+        self.Highlight()
+        
+    def Highlight(self):
+        # create the highlight rectangle around selected objects 
+        highlight = self.Canvas.Document.GetRect(self.Canvas.Document.SelectedObjects)
+        highlight.Stroke.Dash = [5,5]
+        highlight.Fill.Color = (0,0,0,0)
+        highlight.Antialiase = cairo.ANTIALIAS_NONE
+        self.Canvas.Document.ToolObjects = [highlight]
+        self.Canvas.Refresh()
+        
     def OnMouseLeftDown(self,event): 
+            
         selected = self.Canvas.Document.GetUnderPixel(self.Canvas.Document.Mouse)
         # check if there is something selected
         if( selected!=None ):
@@ -29,25 +44,56 @@ class Select(EditingTool):
                     self.Canvas.Document.SelectedObjects.append(selected)
                     
             #if shift is not down, the selection will be only the object
-            else:
+            elif selected not in self.Canvas.Document.SelectedObjects :
                 self.Canvas.Document.SelectedObjects = [selected]
-                
-            # create the highlight rectangle around selected objects 
-            highlight = self.Canvas.Document.GetRect(self.Canvas.Document.SelectedObjects)
-            highlight.Stroke.Dash = [5,5]
-            highlight.Fill.Color = (0,0,0,0)
-            highlight.Antialiase = cairo.ANTIALIAS_NONE
-            self.Canvas.Document.ToolObjects = [highlight]
             
         # if nothing clicked then clear the toolobjects and the selected objects
         else:
             self.Canvas.Document.ToolObjects = []
             self.Canvas.Document.SelectedObjects = []
-            
-        # after all reftesh the canvas
-        self.Canvas.Refresh()
-        event.Skip()
         
+        
+        # the moving starting part
+        partSelected = self.Canvas.Document.GetUnderPixel(self.Canvas.Document.Mouse, objects=self.Canvas.Document.SelectedObjects)
+        # if something under the mouse then start drag operation
+        # by putting start position in the tool.startposition
+        if partSelected!=None :
+            self.startPosition = self.Canvas.Document.Mouse
+            
+        else:
+            self.startPosition = None    
+        # after all reftesh the canvas
+        self.Highlight()
+        event.Skip()
+    
+    
+    def OnMouseMove(self,event):
+        if event.Dragging() and event.LeftIsDown() and self.startPosition!=None :
+            self.Canvas.Document.ToolObjects = []
+            
+            delta = [self.Canvas.Document.Mouse[0]-self.startPosition[0],
+                     self.Canvas.Document.Mouse[1]-self.startPosition[1]]
+            
+            #for each object move it's points
+            for obj in self.Canvas.Document.SelectedObjects:
+                for points in obj.Path.Points:
+                    if points[0]!=None :
+                        points[0][0] += delta[0]
+                        points[0][1] += delta[1]
+                    points[1][0] += delta[0]
+                    points[1][1] += delta[1]
+                    if points[2]!=None :
+                        points[2][0] += delta[0]
+                        points[2][1] += delta[1]
+                
+            self.startPosition = self.Canvas.Document.Mouse
+            self.Canvas.Refresh() #refresh the canvas for each move
+        EditingTool.OnMouseMove(self, event)
+        
+    def OnMouseLeftUp(self, event):
+        self.Highlight()
+        EditingTool.OnMouseLeftUp(self, event)
+    
     def OnKeyDown(self,event):
         keycode = event.GetKeyCode()
         if keycode == wx.WXK_PAGEUP or keycode == wx.WXK_NUMPAD_PAGEUP:
@@ -67,9 +113,10 @@ class Select(EditingTool):
                 self.Canvas.Document.Objects.remove(SelectedObject)
             del self.Canvas.Document.SelectedObjects[:]
         
+        self.Highlight()
         self.Canvas.Refresh()
-        EditingTool.OnKeyDown(self, event)
-   
+        EditingTool.OnKeyDown(self, event)    
+        
     def OnPageUp(self):
         for SelectedObject in self.Canvas.Document.SelectedObjects:
             if SelectedObject == self.Canvas.Document.Objects[-1]:
