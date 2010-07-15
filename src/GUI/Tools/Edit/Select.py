@@ -16,22 +16,92 @@ class Select(EditingTool):
     
     def __init__(self):
         EditingTool.__init__(self,name='Select', icon='select.png',Priority=1000)
+        self.SelectedNode = None
         
     def Activate(self,canvas):
         EditingTool.Activate(self, canvas)
         self.Highlight()
         
     def Highlight(self):
-        # create the highlight rectangle around selected objects 
-        highlight = self.Canvas.Document.GetRect(self.Canvas.Document.SelectedObjects)
-        highlight.Stroke.Dash = [5,5]
-        highlight.Fill.Color = (0,0,0,0)
-        highlight.Antialiase = cairo.ANTIALIAS_NONE
-        self.Canvas.Document.ToolObjects = [highlight]
+        # create the highlight rectangle around selected objects
+        doc = self.Canvas.Document
+        
+        # if something selected then make 
+        # the boundary and control points
+        if len(doc.SelectedObjects)>0 :
+            # create the boundary box
+            rect = doc.GetRect(doc.SelectedObjects)
+            rect.Stroke.Width = 1
+            rect.Antialiase = cairo.ANTIALIAS_NONE
+            rect.Fill.Color = (0,0,0,0)
+            rect.Stroke.Dash = [1,1]
+            
+            #control points
+            # l,r,t,b : left,right,top,bottom respectively
+            self.lt = Document.ControlPoint(rect.Path.Points[0][1][0],rect.Path.Points[0][1][1])
+            self.rt = Document.ControlPoint(rect.Path.Points[1][1][0],rect.Path.Points[0][1][1])
+            self.rb = Document.ControlPoint(rect.Path.Points[1][1][0],rect.Path.Points[1][1][1])
+            self.lb = Document.ControlPoint(rect.Path.Points[0][1][0],rect.Path.Points[1][1][1])
+            self.t  = Document.ControlPoint((rect.Path.Points[0][1][0]+rect.Path.Points[1][1][0])/2.0
+                                            ,rect.Path.Points[0][1][1])
+            self.b  = Document.ControlPoint((rect.Path.Points[0][1][0]+rect.Path.Points[1][1][0])/2.0
+                                            ,rect.Path.Points[1][1][1])
+            self.l  = Document.ControlPoint(rect.Path.Points[0][1][0],
+                                            (rect.Path.Points[0][1][1]+rect.Path.Points[1][1][1])/2.0)
+            self.r  = Document.ControlPoint(rect.Path.Points[1][1][0],
+                                            (rect.Path.Points[0][1][1]+rect.Path.Points[1][1][1])/2.0)
+            self.Rect = rect
+            
+            # add control points to the toolObjects list 
+            # to render it above the canvas
+            doc.ToolObjects = [rect,self.lt,self.rt,
+                               self.rb,self.lb, 
+                               self.t, self.b,
+                               self.l,self.r]
         self.Canvas.Refresh()
         
     def OnMouseLeftDown(self,event): 
-            
+        if not self.InitiateScale() :
+            self.InitiateSelecting(event)
+            self.InitiateMove()
+        self.Canvas.Document.ToolObjects = []
+        EditingTool.OnMouseLeftDown(self, event)
+    
+    def InitiateScale(self):
+        # get the selected Node from the toolObjects
+        underMouse = self.Canvas.Document.GetUnderPixel(self.Canvas.Document.Mouse,
+                                                        objects=self.Canvas.Document.ToolObjects[1:])
+        # if something selected set the selected (to enable dragging)
+        if underMouse!=None and underMouse!=self.Rect :
+            #set the node
+            self.SelectedNode = underMouse
+            # and the current position of mouse
+            self.ScaleStartPosition = self.Canvas.Document.Mouse
+            # then set the origin point according to the selected corner
+            # i set the origin the opposite point of the selected
+            if underMouse==self.rb :
+                self.Origin = self.lt.Path.Points[0][1]
+            if underMouse==self.lt :
+                self.Origin = self.rb.Path.Points[0][1]
+            if underMouse==self.rt :
+                self.Origin = self.lb.Path.Points[0][1]
+            if underMouse==self.lb :
+                self.Origin = self.rt.Path.Points[0][1]
+            if underMouse==self.t :
+                self.Origin = self.b.Path.Points[0][1]
+            if underMouse==self.b :
+                self.Origin = self.t.Path.Points[0][1]
+            if underMouse==self.l :
+                self.Origin = self.r.Path.Points[0][1]
+            if underMouse==self.r :
+                self.Origin = self.l.Path.Points[0][1]
+                
+            self.Canvas.Document.ToolObjects = []
+            self.Canvas.Refresh()
+            return True
+        return False
+    
+    def InitiateSelecting(self, event):
         selected = self.Canvas.Document.GetUnderPixel(self.Canvas.Document.Mouse)
         # check if there is something selected
         if( selected!=None ):
@@ -47,50 +117,102 @@ class Select(EditingTool):
             elif selected not in self.Canvas.Document.SelectedObjects :
                 self.Canvas.Document.SelectedObjects = [selected]
             
-        # if nothing clicked then clear the toolobjects and the selected objects
+        # if nothing clicked then clear the tool objects and the selected objects
         else:
             self.Canvas.Document.ToolObjects = []
             self.Canvas.Document.SelectedObjects = []
-        
-        
+            
+        self.Highlight()
+    
+    def InitiateMove(self):
         # the moving starting part
-        partSelected = self.Canvas.Document.GetUnderPixel(self.Canvas.Document.Mouse, objects=self.Canvas.Document.SelectedObjects)
+        partSelected = self.Canvas.Document.GetUnderPixel(self.Canvas.Document.Mouse,
+                                                          objects=self.Canvas.Document.SelectedObjects)
         # if something under the mouse then start drag operation
         # by putting start position in the tool.startposition
         if partSelected!=None :
             self.startPosition = self.Canvas.Document.Mouse
-            
         else:
-            self.startPosition = None    
-        # after all reftesh the canvas
-        self.Highlight()
-        event.Skip()
-    
-    
+            self.startPosition = None
+                    
     def OnMouseMove(self,event):
-        if event.Dragging() and event.LeftIsDown() and self.startPosition!=None :
-            self.Canvas.Document.ToolObjects = []
+        if event.Dragging() and event.LeftIsDown() :
+            if self.startPosition != None :
+                self.MoveAction(event) 
+            elif self.SelectedNode != None :
+                self.ScaleAction(event)
             
-            delta = [self.Canvas.Document.Mouse[0]-self.startPosition[0],
-                     self.Canvas.Document.Mouse[1]-self.startPosition[1]]
-            
-            #for each object move it's points
-            for obj in self.Canvas.Document.SelectedObjects:
-                for points in obj.Path.Points:
-                    if points[0]!=None :
-                        points[0][0] += delta[0]
-                        points[0][1] += delta[1]
-                    points[1][0] += delta[0]
-                    points[1][1] += delta[1]
-                    if points[2]!=None :
-                        points[2][0] += delta[0]
-                        points[2][1] += delta[1]
-                
-            self.startPosition = self.Canvas.Document.Mouse
             self.Canvas.Refresh() #refresh the canvas for each move
         EditingTool.OnMouseMove(self, event)
+    
+    def MoveAction(self, event):
+        delta = [self.Canvas.Document.Mouse[0]-self.startPosition[0],
+                     self.Canvas.Document.Mouse[1]-self.startPosition[1]]
+            
+        #for each object move it's points
+        for obj in self.Canvas.Document.SelectedObjects:
+            for points in obj.Path.Points:
+                if points[0]!=None :
+                    points[0][0] += delta[0]
+                    points[0][1] += delta[1]
+                points[1][0] += delta[0]
+                points[1][1] += delta[1]
+                if points[2]!=None :
+                    points[2][0] += delta[0]
+                    points[2][1] += delta[1]
+            
+        self.startPosition = self.Canvas.Document.Mouse
         
+    def ScaleAction(self,event):
+        #creating the scale factor
+        factor = [1,1]
+        
+        # check the delta if it's not zero then it's safe for division
+        if self.Origin[0]-self.ScaleStartPosition[0] != 0 and self.Canvas.Document.Mouse[0]!=self.Origin[0]:
+            factor[0] = float(self.Origin[0]-self.Canvas.Document.Mouse[0])/float(self.Origin[0]-self.ScaleStartPosition[0])
+            
+        if self.Origin[1]-self.ScaleStartPosition[1] != 0 and self.Canvas.Document.Mouse[1]!=self.Origin[1]:
+            factor[1] = float(self.Origin[1]-self.Canvas.Document.Mouse[1])/float(self.Origin[1]-self.ScaleStartPosition[1])
+        
+        # if the scale from one side only then we
+        # have to make the other axis does'nt resize
+        # for example if the top middle node is moving then we'll not
+        # resize the width we'll only resize height 
+        if self.SelectedNode == self.t or self.SelectedNode == self.b : factor[0] = 1
+        if self.SelectedNode == self.l or self.SelectedNode == self.r : factor[1] = 1
+        
+        # resize all selected objects by factor according to origin    
+        for i in self.Canvas.Document.SelectedObjects :
+            for point in i.Path.Points :
+                if point[0] != None :
+                    point[0][0] = (point[0][0]-self.Origin[0])*factor[0]+self.Origin[0]
+                    point[0][1] = (point[0][1]-self.Origin[1])*factor[1]+self.Origin[1]
+                point[1][0] = (point[1][0]-self.Origin[0])*factor[0]+self.Origin[0]
+                point[1][1] = (point[1][1]-self.Origin[1])*factor[1]+self.Origin[1]
+                if point[2] != None :
+                    point[2][0] = (point[2][0]-self.Origin[0])*factor[0]+self.Origin[0]
+                    point[2][1] = (point[2][1]-self.Origin[1])*factor[1]+self.Origin[1]
+         
+        '''
+        update current mouse position
+        that method of replacing the new position
+        will fix the bug of 0 width/height freezing
+        the problem was if i resize objects to 0 they'll 
+        be frozen and doesn't resize any more
+        '''
+        newpos = list(self.ScaleStartPosition)
+        if self.Canvas.Document.Mouse[0]!=self.Origin[0] :
+            newpos[0] = self.Canvas.Document.Mouse[0]
+            
+        if self.Canvas.Document.Mouse[1]!=self.Origin[1] :
+            newpos[1] = self.Canvas.Document.Mouse[1]
+            
+        self.ScaleStartPosition = tuple(newpos)
+                
     def OnMouseLeftUp(self, event):
+        self.startPosition = None
+        self.SelectedNode = None
+        self.ScaleStartPosition = None
         self.Highlight()
         EditingTool.OnMouseLeftUp(self, event)
     
