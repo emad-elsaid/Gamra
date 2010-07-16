@@ -59,6 +59,8 @@ class Select(EditingTool):
                                self.rb,self.lb, 
                                self.t, self.b,
                                self.l,self.r]
+        else:
+            self.Canvas.Document.ToolObjects = []
         self.Canvas.Refresh()
         
     def OnMouseLeftDown(self,event): 
@@ -121,7 +123,6 @@ class Select(EditingTool):
             
         # if nothing clicked then clear the tool objects and the selected objects
         else:
-            self.Canvas.Document.ToolObjects = []
             self.Canvas.Document.SelectedObjects = []
             
         self.Highlight()
@@ -238,7 +239,6 @@ class Select(EditingTool):
             del self.Canvas.Document.SelectedObjects[:]
         
         self.Highlight()
-        self.Canvas.Refresh()
         EditingTool.OnKeyDown(self, event)    
         
     def OnPageUp(self):
