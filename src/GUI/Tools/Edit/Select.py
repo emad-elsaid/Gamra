@@ -16,7 +16,8 @@ class Select(EditingTool):
     
     def __init__(self):
         EditingTool.__init__(self,name='Select', icon='select.png',Priority=1000)
-        self.SelectedNode = None
+        #self.SelectedNode = None
+        self.Scale = False
         
     def Activate(self,canvas):
         EditingTool.Activate(self, canvas)
@@ -74,6 +75,7 @@ class Select(EditingTool):
         # if something selected set the selected (to enable dragging)
         if underMouse!=None and underMouse!=self.Rect :
             #set the node
+            self.Scale = True
             self.SelectedNode = underMouse
             # and the current position of mouse
             self.ScaleStartPosition = self.Canvas.Document.Mouse
@@ -139,7 +141,7 @@ class Select(EditingTool):
         if event.Dragging() and event.LeftIsDown() :
             if self.startPosition != None :
                 self.MoveAction(event) 
-            elif self.SelectedNode != None :
+            elif self.Scale :
                 self.ScaleAction(event)
             
             self.Canvas.Refresh() #refresh the canvas for each move
@@ -211,7 +213,7 @@ class Select(EditingTool):
                 
     def OnMouseLeftUp(self, event):
         self.startPosition = None
-        self.SelectedNode = None
+        self.Scale = False
         self.ScaleStartPosition = None
         self.Highlight()
         EditingTool.OnMouseLeftUp(self, event)
