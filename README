@@ -19,4 +19,20 @@ Developers:
 	Faculty of computer and informatics students
 	Suez canal university, Egypt
 	the project is developed as summer training course 2009/2010
+	
+How to contribute :
+	you can fork that repository by clicking the fork button above
+	and head to : 
+		http://github.com/blazeeboy/Gamra/issues
+	you'll find tasks explained, don't worry it's very simple 
+	for wxpython and cairo developers.
+	you can choose a task and comment that you'll do it,
+	when you done send pull request to me (blazeeboy) and i'll review your commit
+	and merge it if valid.
+	
+Wanna say i like that project ?
+	you can watch the project for "i like that project"
+	or you can fork it to say "Go a head guys i love it"
+	e-mails and PMs are always welcome to encourage us.  
+	
 	 
