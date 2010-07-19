@@ -43,16 +43,16 @@ class ObjectPanel(Generic):
         
     def Activate(self,canvas):
         if len(canvas.Document.SelectedObjects)==1 :
-            self.Show()
-            self.w.SetValue("%s" %(canvas.Document.SelectedObjects[0].Path.Points[1][1][0]-canvas.Document.SelectedObjects[0].Path.Points[0][1][0]))
-            self.h.SetValue("%s" %(canvas.Document.SelectedObjects[0].Path.Points[1][1][1]-canvas.Document.SelectedObjects[0].Path.Points[0][1][1]))
-            self.x.SetValue("%s" %(canvas.Document.SelectedObjects[0].Path.Points[0][1][0]))
-            self.y.SetValue("%s" %(canvas.Document.SelectedObjects[0].Path.Points[0][1][1]))
+            rect = canvas.Document.GetRect(canvas.Document.SelectedObjects)
+            self.w.ChangeValue("%s" %(rect.Path.Points[1][1][0]-rect.Path.Points[0][1][0]))
+            self.h.ChangeValue("%s" %(rect.Path.Points[1][1][1]-rect.Path.Points[0][1][1]))
+            self.x.ChangeValue("%s" %(rect.Path.Points[0][1][0]))
+            self.y.ChangeValue("%s" %(rect.Path.Points[0][1][1]))
             
-            self.x.Bind(wx.EVT_TEXT_ENTER, self.OnTextCtrlX)
-            self.y.Bind(wx.EVT_TEXT_ENTER, self.OnTextCtrlY)
-            self.w.Bind(wx.EVT_TEXT_ENTER, self.OnTextCtrlW)
-            self.h.Bind(wx.EVT_TEXT_ENTER, self.OnTextCtrlH)    
+            self.x.Bind(wx.EVT_TEXT, self.OnTextCtrlX)
+            self.y.Bind(wx.EVT_TEXT, self.OnTextCtrlY)
+            self.w.Bind(wx.EVT_TEXT, self.OnTextCtrlW)
+            self.h.Bind(wx.EVT_TEXT, self.OnTextCtrlH)    
             
             self.selected = canvas.Document.SelectedObjects[0]
             cls = str(self.selected.__class__).split(".")
@@ -64,69 +64,83 @@ class ObjectPanel(Generic):
             self.Hide()
     
     def Deactivate(self, canvas):
-        self.x.Unbind(wx.EVT_TEXT_ENTER)
-        self.y.Unbind(wx.EVT_TEXT_ENTER)
-        self.w.Unbind(wx.EVT_TEXT_ENTER)
-        self.h.Unbind(wx.EVT_TEXT_ENTER)    
+        self.x.Unbind(wx.EVT_TEXT)
+        self.y.Unbind(wx.EVT_TEXT)
+        self.w.Unbind(wx.EVT_TEXT)
+        self.h.Unbind(wx.EVT_TEXT)    
             
     def OnTextCtrlX(self, event):
-        first_point = self.selected.Path.Points[0][1][0]
+        if event.GetString()=='' : return
+        
+        rect = wx.GetApp().Frame.Canvas.Document.GetRect(wx.GetApp().Frame.Canvas.Document.SelectedObjects)
+        first_point = rect.Path.Points[0][1][0]        
         diff = int(event.GetString()) - first_point
         for point in self.selected.Path.Points:
             point[1][0] +=  diff
-            if point[0] != None and point[2] != None:
+            if point[0] != None :
                 point[0][0] +=  diff
+            if point[2] != None :
                 point[2][0] +=  diff
-        self.GetParent().Parent.Canvas.Refresh()
+        wx.GetApp().Frame.Canvas.Refresh()
     
     def OnTextCtrlY(self, event):
-        first_point = self.selected.Path.Points[0][1][1]
+        if event.GetString()=='' : return
+        
+        rect = wx.GetApp().Frame.Canvas.Document.GetRect(wx.GetApp().Frame.Canvas.Document.SelectedObjects)
+        first_point = rect.Path.Points[0][1][1]
         diff = int(event.GetString()) - first_point
         for point in self.selected.Path.Points:
             point[1][1] += diff
-            if point[0] != None and point[2] != None:
+            if point[0] != None :
                 point[0][1] +=  diff
+            if point[2] != None :
                 point[2][1] +=  diff
         self.GetParent().Parent.Canvas.Refresh()
         
     def OnTextCtrlW(self, event):
-        if float( event.GetString() ) < 0:
+        if event.GetString()=='' : return
+        if float( event.GetString() ) <= 0:
             return 
         
-        w = abs(self.selected.Path.Points[0][1][0] - self.selected.Path.Points[1][1][0])
+        rect = wx.GetApp().Frame.Canvas.Document.GetRect(wx.GetApp().Frame.Canvas.Document.SelectedObjects)
+        w = abs(rect.Path.Points[0][1][0] - rect.Path.Points[1][1][0])
         new_w = float( event.GetString() )
         factor = float(new_w / w)
         
-        x_topleft = self.selected.Path.Points[0][1][0]
+        x_topleft = rect.Path.Points[0][1][0]
         
         sliced_list = self.selected.Path.Points[1:]
         '''To skip doing scaling operation on top left point of the object (a.k.a first element)'''
         for points in sliced_list:
             points[1][0] = (points[1][0] - x_topleft) * factor + x_topleft
-            if points[0] != None and points[2] != None:
+            if points[0] != None :
                 '''If there are handlers exist'''
                 points[0][0] = (points[0][0] - x_topleft) * factor + x_topleft
+            if points[2] != None :
                 points[2][0] = (points[2][0] - x_topleft) * factor + x_topleft
         
-        self.GetParent().Parent.Canvas.Refresh()
+        wx.GetApp().Frame.Canvas.Refresh()
         
     def OnTextCtrlH(self, event):
-        if float( event.GetString() ) < 0:
+        if event.GetString()=='' : return
+        if float( event.GetString() ) <= 0:
             return 
         
-        h = abs(self.selected.Path.Points[0][1][1] - self.selected.Path.Points[1][1][1])
+        rect = wx.GetApp().Frame.Canvas.Document.GetRect(wx.GetApp().Frame.Canvas.Document.SelectedObjects)
+        h = abs(rect.Path.Points[0][1][1] - rect.Path.Points[1][1][1])
         new_h = float( event.GetString() )
         factor = float(new_h / h)
         
-        y_topleft = self.selected.Path.Points[0][1][1]
+        y_topleft = rect.Path.Points[0][1][1]
         
         sliced_list = self.selected.Path.Points[1:]
         '''To skip doing scaling operation on top left point of the object (a.k.a first element)'''
         for points in sliced_list:
             points[1][1] = (points[1][1] - y_topleft) * factor + y_topleft
-            if points[0] != None and points[2] != None:
+            if points[0] != None :
                 '''If there are handlers exist'''
                 points[0][1] = (points[0][1] - y_topleft) * factor + y_topleft
+            if points[2] != None :
                 points[2][1] = (points[2][1] - y_topleft) * factor + y_topleft
         
-        self.GetParent().Parent.Canvas.Refresh()
+        wx.GetApp().Frame.Canvas.Refresh()
