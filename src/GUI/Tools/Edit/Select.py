@@ -7,6 +7,7 @@ from GUI.Tools.Tools import EditingTool
 import cairo
 import wx
 import Document
+import math
 
 
 class Select(EditingTool):
@@ -16,8 +17,10 @@ class Select(EditingTool):
     
     def __init__(self):
         EditingTool.__init__(self,name='Select', icon='select.png',Priority=1000)
-        #self.SelectedNode = None
         self.Scale = False
+        self.Rotate = False
+        self.RotationOrigin = None
+        self.CurrentAngle = None
         
     def Activate(self,canvas):
         EditingTool.Activate(self, canvas)
@@ -35,7 +38,7 @@ class Select(EditingTool):
             rect.Stroke.Width = 1
             rect.Antialiase = cairo.ANTIALIAS_NONE
             rect.Fill.Color = (0,0,0,0)
-            rect.Stroke.Dash = [1,1]
+            rect.Stroke.Dash = [3,2]
             
             #control points
             # l,r,t,b : left,right,top,bottom respectively
@@ -51,6 +54,13 @@ class Select(EditingTool):
                                             (rect.Path.Points[0][1][1]+rect.Path.Points[1][1][1])/2.0)
             self.r  = Document.ControlPoint(rect.Path.Points[1][1][0],
                                             (rect.Path.Points[0][1][1]+rect.Path.Points[1][1][1])/2.0)
+            
+            # rotate controls
+            self.rlt = Document.ControlPoint(rect.Path.Points[0][1][0]-5,rect.Path.Points[0][1][1]-5)
+            self.rrt = Document.ControlPoint(rect.Path.Points[1][1][0]+5,rect.Path.Points[0][1][1]-5)
+            self.rrb = Document.ControlPoint(rect.Path.Points[1][1][0]+5,rect.Path.Points[1][1][1]+5)
+            self.rlb = Document.ControlPoint(rect.Path.Points[0][1][0]-5,rect.Path.Points[1][1][1]+5)
+            
             self.Rect = rect
             
             # add control points to the toolObjects list 
@@ -58,13 +68,15 @@ class Select(EditingTool):
             doc.ToolObjects = [rect,self.lt,self.rt,
                                self.rb,self.lb, 
                                self.t, self.b,
-                               self.l,self.r]
+                               self.l,self.r,
+                               self.rlt,self.rrt,
+                               self.rrb,self.rlb]
         else:
             self.Canvas.Document.ToolObjects = []
         self.Canvas.Refresh()
         
     def OnMouseLeftDown(self,event): 
-        if not self.InitiateScale() :
+        if (not self.InitiateScale()) and (not self.InitiateRotation()) :
             self.InitiateSelecting(event)
             self.InitiateMove()
         self.Canvas.Document.ToolObjects = []
@@ -75,7 +87,7 @@ class Select(EditingTool):
         underMouse = self.Canvas.Document.GetUnderPixel(self.Canvas.Document.Mouse,
                                                         objects=self.Canvas.Document.ToolObjects[1:])
         # if something selected set the selected (to enable dragging)
-        if underMouse!=None and underMouse!=self.Rect :
+        if underMouse!=None and underMouse in [self.lt,self.rt,self.rb,self.lb, self.t, self.b,self.l,self.r] :
             #set the node
             self.Scale = True
             self.SelectedNode = underMouse
@@ -100,6 +112,20 @@ class Select(EditingTool):
             if underMouse==self.r :
                 self.Origin = self.l.Path.Points[0][1]
                 
+            self.Canvas.Document.ToolObjects = []
+            self.Canvas.Refresh()
+            return True
+        return False
+    
+    def InitiateRotation(self):
+        # get the selected Node from the toolObjects
+        underMouse = self.Canvas.Document.GetUnderPixel(self.Canvas.Document.Mouse,
+                                                        objects=self.Canvas.Document.ToolObjects[1:])
+        # if something selected set the selected (to enable dragging)
+        if underMouse!=None and underMouse in [self.rlt,self.rrt,self.rrb,self.rlb] :
+            #set the node
+            self.Rotate = True
+            
             self.Canvas.Document.ToolObjects = []
             self.Canvas.Refresh()
             return True
@@ -144,6 +170,8 @@ class Select(EditingTool):
                 self.MoveAction(event) 
             elif self.Scale :
                 self.ScaleAction(event)
+            elif self.Rotate :
+                self.RotateAction(event)
             
             self.Canvas.Refresh() #refresh the canvas for each move
         EditingTool.OnMouseMove(self, event)
@@ -211,11 +239,53 @@ class Select(EditingTool):
             newpos[1] = self.Canvas.Document.Mouse[1]
             
         self.ScaleStartPosition = tuple(newpos)
+     
+    
+    def RotateAction(self,event):
+        if  event.LeftIsDown() :
+        
+            #calculating the current angle
+            if self.RotationOrigin == None :
+                rect = self.Canvas.Document.GetRect(self.Canvas.Document.SelectedObjects)
+                rectPoints = rect.Path.Points
+                self.RotationOrigin = ((rectPoints[1][1][0]+rectPoints[0][1][0])/2.0,
+                          (rectPoints[1][1][1]+rectPoints[0][1][1])/2.0)
+                self.Canvas.Document.ToolObjects = [Document.Rectangle(self.RotationOrigin[0]-1,self.RotationOrigin[1]-1,2,2)]
                 
+            mouse = self.Canvas.Document.Mouse
+            currentAngle = math.atan2( self.RotationOrigin[1]-mouse[1], mouse[0]-self.RotationOrigin[0])
+            
+            if self.CurrentAngle == None :
+                self.CurrentAngle = currentAngle
+                
+            else:
+                diff = self.CurrentAngle-currentAngle
+                sin = math.sin(diff)
+                cos = math.cos(diff)
+                    
+                for obj in self.Canvas.Document.SelectedObjects :
+                    for point in obj.Path.Points :
+                        for pair in point :
+                            if pair != None :
+                                pair[0] -= self.RotationOrigin[0]
+                                pair[1] -= self.RotationOrigin[1]
+                                x,y = pair
+                                pair[0] = x*cos-y*sin+self.RotationOrigin[0]
+                                pair[1] = x*sin+y*cos+self.RotationOrigin[1] 
+                   
+                self.CurrentAngle = currentAngle
+                   
     def OnMouseLeftUp(self, event):
+        
         self.startPosition = None
+        
         self.Scale = False
         self.ScaleStartPosition = None
+        
+        self.Rotate = False
+        self.RotationOrigin = None
+        self.CurrentAngle = None
+        
         self.Highlight()
         EditingTool.OnMouseLeftUp(self, event)
     
