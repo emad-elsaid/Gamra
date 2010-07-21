@@ -158,7 +158,7 @@ class ControlPoint(Object):
     def __init__(self,x,y):
         Object.__init__(self)
         self.Path.add1(x,y)
-        self.Antialiase = cairo.ANTIALIAS_NONE
+        self.Antialias = cairo.ANTIALIAS_NONE
         
     def Apply(self,ctx):
         ctx.new_path()
