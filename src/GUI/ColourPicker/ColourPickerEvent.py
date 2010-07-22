@@ -5,18 +5,21 @@ Created on Jun 18, 2010
 '''
 
 import wx
-
+import wx.lib.newevent
 """ A custom made Event Type"""
-wxEVT_COLOURPICKER = wx.NewEventType()
+myEVT_COLOURPICKER = wx.NewEventType()
+EVT_COLOURPICKER = wx.PyEventBinder(myEVT_COLOURPICKER, 1)
 
-class ColourPickerEvent(wx.Event):
+
+class ColourPickerEvent(wx.PyCommandEvent):
     """
     A custom made Event generated when colour is chosen 
     from the ColourPickerButton
     """
-    def __init__(self, id = wx.ID_ANY):
-        wx.Event.__init__(id, wxEVT_COLOURPICKER)
-        print "Colour Changed"
+    def __init__(self, evtType, winid, colour = None ):
+        wx.PyCommandEvent.__init__(self, evtType, winid)
+        self.colour = colour
+    
+    def GetColour(self):
+        return (self.colour[0]/255.0, self.colour[1]/255.0, self.colour[2]/255.0, self.colour[3]/255.0)
         
-    
-    

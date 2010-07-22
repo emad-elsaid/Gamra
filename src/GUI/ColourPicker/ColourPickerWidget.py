@@ -6,6 +6,7 @@ Created on Jun 16, 2010
 import wx
 import re
 from wx.lib.statbmp import GenStaticBitmap
+import ColourPickerEvent
 
 class ColourPickerPanel(wx.Panel):
     '''
@@ -153,6 +154,9 @@ class ColourPickerWidget(wx.Button):
             colour = wx.Color(colour[0]*255,colour[1]*255,colour[2]*255,colour[3]*255)
         self.panel.SetColour(colour)
         self.SetBackgroundColour(colour)
+        event = ColourPickerEvent.ColourPickerEvent( ColourPickerEvent.EVT_COLOURPICKER.typeId, self.GetId(), self.panel.GetColour().Get(True) )
+        self.GetEventHandler().ProcessEvent(event)
+        
         
     def GetColour(self):
         colour =  self.panel.GetColour().Get(True)
