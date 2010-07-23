@@ -36,7 +36,7 @@ class Select(EditingTool):
             # create the boundary box
             rect = doc.GetRect(doc.SelectedObjects)
             rect.Stroke.Width = 1
-            rect.Antialiase = cairo.ANTIALIAS_NONE
+            rect.Antialias = cairo.ANTIALIAS_NONE
             rect.Fill.Color = (0,0,0,0)
             rect.Stroke.Dash = [3,2]
             
