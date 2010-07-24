@@ -4,7 +4,7 @@ import Document
 
 class Line(VectorTool):
     '''
-    this tool for mdraw line the selected objects
+    this tool for drawing line the selected objects
     '''
     def __init__ (self):
         VectorTool.__init__(self,name='Line',icon='line.png')
@@ -16,6 +16,7 @@ class Line(VectorTool):
         obj.Path.add1(self.StartPoint[0],self.StartPoint[1])
         
         self.Canvas.Document.Objects.append(obj)
+        self.Canvas.Document.SelectedObjects = [self.Canvas.Document.Objects[-1]]
         self.Canvas.Refresh()
         
         
@@ -27,5 +28,3 @@ class Line(VectorTool):
             self.Canvas.Refresh()
             
         VectorTool.OnMouseMove(self,event)
-	
-	

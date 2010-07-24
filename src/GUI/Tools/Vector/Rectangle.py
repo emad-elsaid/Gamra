@@ -25,6 +25,7 @@ class Rectangle(VectorTool):
         opath.Closed = True
         
         self.Canvas.Document.Objects.append(obj)
+        self.Canvas.Document.SelectedObjects = [self.Canvas.Document.Objects[-1]]
         self.Canvas.Refresh()
         VectorTool.OnMouseLeftDown(self, event)
     
