@@ -14,18 +14,18 @@ class ObjectPanel(Generic):
         
         g = wx.FlexGridSizer(2,4,3,3)
         s1 = wx.StaticText(self,-1,"X")
-        self.x = wx.TextCtrl(self, style = wx.TE_PROCESS_ENTER)
+        self.x = wx.SpinCtrl(self,-1,'1', style= wx.SP_ARROW_KEYS | wx.SP_WRAP)
         
         s2 = wx.StaticText(self,-1,"Y")
-        self.y = wx.TextCtrl(self, style = wx.TE_PROCESS_ENTER)
+        self.y = wx.SpinCtrl(self,-1,'1', style= wx.SP_ARROW_KEYS | wx.SP_WRAP)
         
         
         s3 = wx.StaticText(self,-1,"W")
-        self.w = wx.TextCtrl(self, style = wx.TE_PROCESS_ENTER)
+        self.w = wx.SpinCtrl(self,-1,'1', style= wx.SP_ARROW_KEYS | wx.SP_WRAP)
         
         
         s4 = wx.StaticText(self,-1,"H")
-        self.h = wx.TextCtrl(self, style = wx.TE_PROCESS_ENTER)
+        self.h = wx.SpinCtrl(self,-1,'1', style= wx.SP_ARROW_KEYS | wx.SP_WRAP)
         
         
         g.Add(s1)
@@ -44,16 +44,19 @@ class ObjectPanel(Generic):
     def Activate(self,canvas):
         if len(canvas.Document.SelectedObjects)==1 :
             rect = canvas.Document.GetRect(canvas.Document.SelectedObjects)
-            self.w.ChangeValue("%s" %(rect.Path.Points[1][1][0]-rect.Path.Points[0][1][0]))
-            self.h.ChangeValue("%s" %(rect.Path.Points[1][1][1]-rect.Path.Points[0][1][1]))
-            self.x.ChangeValue("%s" %(rect.Path.Points[0][1][0]))
-            self.y.ChangeValue("%s" %(rect.Path.Points[0][1][1]))
+            self.w.SetValue(rect.Path.Points[1][1][0]-rect.Path.Points[0][1][0])
+            self.h.SetValue(rect.Path.Points[1][1][1]-rect.Path.Points[0][1][1])
+            self.x.SetValue(rect.Path.Points[0][1][0])
+            self.y.SetValue(rect.Path.Points[0][1][1])
             
-            self.x.Bind(wx.EVT_TEXT, self.OnTextCtrlX)
-            self.y.Bind(wx.EVT_TEXT, self.OnTextCtrlY)
-            self.w.Bind(wx.EVT_TEXT, self.OnTextCtrlW)
-            self.h.Bind(wx.EVT_TEXT, self.OnTextCtrlH)    
-            
+            self.x.Bind(wx.EVT_SPINCTRL, self.OnSpinCtrlX)
+            self.y.Bind(wx.EVT_SPINCTRL, self.OnSpinCtrlY)
+            self.w.Bind(wx.EVT_SPINCTRL, self.OnSpinCtrlW)
+            self.h.Bind(wx.EVT_SPINCTRL, self.OnSpinCtrlH)    
+            self.x.SetRange(-1000, 1000)
+            self.y.SetRange(-1000, 1000)
+            self.w.SetRange(1, 1000)
+            self.h.SetRange(1, 1000)
             self.selected = canvas.Document.SelectedObjects[0]
             cls = str(self.selected.__class__).split(".")
             cls = cls[1]
@@ -64,17 +67,15 @@ class ObjectPanel(Generic):
             self.Hide()
     
     def Deactivate(self, canvas):
-        self.x.Unbind(wx.EVT_TEXT)
-        self.y.Unbind(wx.EVT_TEXT)
-        self.w.Unbind(wx.EVT_TEXT)
-        self.h.Unbind(wx.EVT_TEXT)    
+        self.x.Unbind(wx.EVT_SPINCTRL)
+        self.y.Unbind(wx.EVT_SPINCTRL)
+        self.w.Unbind(wx.EVT_SPINCTRL)
+        self.h.Unbind(wx.EVT_SPINCTRL)    
             
-    def OnTextCtrlX(self, event):
-        if event.GetString()=='' : return
-        
+    def OnSpinCtrlX(self, event):
         rect = wx.GetApp().Frame.Canvas.Document.GetRect(wx.GetApp().Frame.Canvas.Document.SelectedObjects)
         first_point = rect.Path.Points[0][1][0]        
-        diff = int(event.GetString()) - first_point
+        diff = self.x.GetValue() - first_point
         for point in self.selected.Path.Points:
             point[1][0] +=  diff
             if point[0] != None :
@@ -83,12 +84,10 @@ class ObjectPanel(Generic):
                 point[2][0] +=  diff
         wx.GetApp().Frame.Canvas.Refresh()
     
-    def OnTextCtrlY(self, event):
-        if event.GetString()=='' : return
-        
+    def OnSpinCtrlY(self, event):
         rect = wx.GetApp().Frame.Canvas.Document.GetRect(wx.GetApp().Frame.Canvas.Document.SelectedObjects)
         first_point = rect.Path.Points[0][1][1]
-        diff = int(event.GetString()) - first_point
+        diff = self.y.GetValue() - first_point
         for point in self.selected.Path.Points:
             point[1][1] += diff
             if point[0] != None :
@@ -97,14 +96,10 @@ class ObjectPanel(Generic):
                 point[2][1] +=  diff
         self.GetParent().Parent.Canvas.Refresh()
         
-    def OnTextCtrlW(self, event):
-        if event.GetString()=='' : return
-        if float( event.GetString() ) <= 0:
-            return 
-        
+    def OnSpinCtrlW(self, event):
         rect = wx.GetApp().Frame.Canvas.Document.GetRect(wx.GetApp().Frame.Canvas.Document.SelectedObjects)
         w = abs(rect.Path.Points[0][1][0] - rect.Path.Points[1][1][0])
-        new_w = float( event.GetString() )
+        new_w = float( self.w.GetValue() )
         factor = float(new_w / w)
         
         x_topleft = rect.Path.Points[0][1][0]
@@ -121,14 +116,10 @@ class ObjectPanel(Generic):
         
         wx.GetApp().Frame.Canvas.Refresh()
         
-    def OnTextCtrlH(self, event):
-        if event.GetString()=='' : return
-        if float( event.GetString() ) <= 0:
-            return 
-        
+    def OnSpinCtrlH(self, event):
         rect = wx.GetApp().Frame.Canvas.Document.GetRect(wx.GetApp().Frame.Canvas.Document.SelectedObjects)
         h = abs(rect.Path.Points[0][1][1] - rect.Path.Points[1][1][1])
-        new_h = float( event.GetString() )
+        new_h = float( self.h.GetValue() )
         factor = float(new_h / h)
         
         y_topleft = rect.Path.Points[0][1][1]
