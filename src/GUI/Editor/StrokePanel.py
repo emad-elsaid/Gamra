@@ -20,34 +20,34 @@ class StrokePanel(Generic):
         self.color = ColourPickerWidget.ColourPickerWidget(self)
         firstLine.Add(self.color)
        
-        self.Bind(ColourPickerEvent.EVT_COLOURPICKER, self.OnColourChoice)
-        
         firstLine.Add(wx.StaticText(self,-1,"Thickness :"))
         
-        self.widthCtrl = wx.TextCtrl(self,-1,'1', style=wx.TE_PROCESS_ENTER)
+        self.widthCtrl = wx.SpinCtrl(self,-1,'1', style= wx.SP_ARROW_KEYS | wx.SP_WRAP)
         firstLine.Add(self.widthCtrl)
         self.mainSizer.AddSpacer(wx.Size(5, 5))
-        self.widthCtrl.Bind(wx.EVT_TEXT, self.OnWidthTextCtrl)
+        
         
         self.mainSizer.Add(vertical)
         self.mainSizer.AddSpacer(wx.Size(10, 10))
+    
     def Activate(self,canvas):
         if len(canvas.Document.SelectedObjects)==1 :
             self.Show()
-            self.widthCtrl.SetValue("%s" %(canvas.Document.SelectedObjects[0].Stroke.Width))
+            self.widthCtrl.SetValue(canvas.Document.SelectedObjects[0].Stroke.Width)
+            self.widthCtrl.SetRange(1, 1000)
             self.color.SetColour(canvas.Document.SelectedObjects[0].Stroke.Color)
-            
+            self.widthCtrl.Bind(wx.EVT_SPINCTRL, self.OnWidthSpinCtrl)
+            self.Bind(ColourPickerEvent.EVT_COLOURPICKER, self.OnColourChoice)
+        
         else:
             self.Hide()
 
     def OnColourChoice(self, event):
         wx.GetApp().Frame.Canvas.Document.SelectedObjects[0].Stroke.Color = event.GetColour()
         wx.GetApp().Frame.Canvas.Refresh()
-        
+        event.Skip()
     
-    def OnWidthTextCtrl(self, event):
-        if( event.GetString() != ''):
-            value = float(event.GetString())
-            wx.GetApp().Frame.Canvas.Document.SelectedObjects[0].Stroke.Width = value
-            wx.GetApp().Frame.Canvas.Refresh()
-            event.Skip()
+    def OnWidthSpinCtrl(self, event):
+        wx.GetApp().Frame.Canvas.Document.SelectedObjects[0].Stroke.Width = self.widthCtrl.GetValue()
+        wx.GetApp().Frame.Canvas.Refresh()
+        event.Skip()
