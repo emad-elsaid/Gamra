@@ -361,6 +361,8 @@ class Select(EditingTool):
             for SelectedObject in self.Canvas.Document.SelectedObjects:
                 self.Canvas.Document.Objects.remove(SelectedObject)
             del self.Canvas.Document.SelectedObjects[:]
+            
+            wx.GetApp().Frame.Properties.Refresh(self.Canvas)
         
         self.Highlight()
         EditingTool.OnKeyDown(self, event)    
