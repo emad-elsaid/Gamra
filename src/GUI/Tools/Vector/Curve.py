@@ -4,6 +4,7 @@ Created on Jul 7, 2010
 @author: blaze
 '''
 from GUI.Tools.Tools import VectorTool
+import wx
 import Document
 import math
 
@@ -93,3 +94,12 @@ class Curve(VectorTool):
             
         
         VectorTool.Deactivate(self)
+        
+    def OnKeyDown(self,event):
+        keycode = event.GetKeyCode()
+        if keycode == wx.WXK_RETURN and self.Started :
+            self.Started = False
+            del self.Canvas.Document.Objects[-1].Path.Points[-1]
+            self.Canvas.Document.ToolObjects = []
+            self.Canvas.Refresh()
+            
