@@ -55,6 +55,7 @@ class Curve(VectorTool):
                 self.Canvas.Document.Objects[-1].Path.Closed = True
                 self.Canvas.Document.ToolObjects = []
                 del self.Canvas.Document.Objects[-1].Path.Points[-1]
+                self.Canvas.Document.SelectedObjects = [self.Canvas.Document.Objects[-1]]
                 self.Started = False
                 
             

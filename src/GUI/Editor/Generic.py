@@ -19,7 +19,11 @@ class Generic(wx.Panel):
         self.mainSizer = wx.BoxSizer(wx.HORIZONTAL)
         self.leftSizer = wx.BoxSizer(wx.VERTICAL)
         self.leftSizer.Add(staticBitmap, 0, wx.ALIGN_TOP | wx.ALIGN_CENTER)
+        self.mainSizer.AddSpacer(5)
+        self.mainSizer.Add( wx.StaticLine( self, -1, (0,0), (1,80), style=wx.LI_VERTICAL ) )
+        self.mainSizer.AddSpacer(5)
         self.mainSizer.Add(self.leftSizer, 0)
+        self.mainSizer.AddSpacer(10)
         self.SetSizer(self.mainSizer)
         self.Show(False)
         

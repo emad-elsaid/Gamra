@@ -211,7 +211,7 @@ class Document:
         self.Mouse = (0,0)
         
         self.Border = Rectangle(-2,-2,self.Width+2*2,self.Height+2*2)
-        self.Border.Stroke.Width = 2
+        self.Border.Stroke.Width = 1
         self.Border.Antialias = cairo.ANTIALIAS_NONE
        
     def GetUnderPixel(self,pixel,returnList=False,objects=None):

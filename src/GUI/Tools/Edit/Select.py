@@ -19,8 +19,10 @@ class Select(EditingTool):
         EditingTool.__init__(self,name='Select', icon='select.png',Priority=1000)
         self.Scale = False
         self.Rotate = False
+        self.Shear = False
         self.RotationOrigin = None
         self.CurrentAngle = None
+        self.startPosition = None
         
     def Activate(self,canvas):
         EditingTool.Activate(self, canvas)
@@ -36,7 +38,7 @@ class Select(EditingTool):
             # create the boundary box
             rect = doc.GetRect(doc.SelectedObjects)
             rect.Stroke.Width = 1
-            rect.Antialiase = cairo.ANTIALIAS_NONE
+            rect.Antialias = cairo.ANTIALIAS_NONE
             rect.Fill.Color = (0,0,0,0)
             rect.Stroke.Dash = [3,2]
             
@@ -61,6 +63,16 @@ class Select(EditingTool):
             self.rrb = Document.ControlPoint(rect.Path.Points[1][1][0]+5,rect.Path.Points[1][1][1]+5)
             self.rlb = Document.ControlPoint(rect.Path.Points[0][1][0]-5,rect.Path.Points[1][1][1]+5)
             
+            # shear controls
+            self.sl = Document.ControlPoint(rect.Path.Points[0][1][0]-6,
+                                            (rect.Path.Points[0][1][1]+rect.Path.Points[1][1][1])/2.0)
+            self.sr = Document.ControlPoint(rect.Path.Points[1][1][0]+6,
+                                            (rect.Path.Points[0][1][1]+rect.Path.Points[1][1][1])/2.0)
+            self.st = Document.ControlPoint((rect.Path.Points[0][1][0]+rect.Path.Points[1][1][0])/2.0
+                                            ,rect.Path.Points[0][1][1]-6)
+            self.sb = Document.ControlPoint((rect.Path.Points[0][1][0]+rect.Path.Points[1][1][0])/2.0
+                                            ,rect.Path.Points[1][1][1]+6)
+            
             self.Rect = rect
             
             # add control points to the toolObjects list 
@@ -70,13 +82,14 @@ class Select(EditingTool):
                                self.t, self.b,
                                self.l,self.r,
                                self.rlt,self.rrt,
-                               self.rrb,self.rlb]
+                               self.rrb,self.rlb,
+                               self.sl,self.sr,self.st,self.sb]
         else:
             self.Canvas.Document.ToolObjects = []
         self.Canvas.Refresh()
         
     def OnMouseLeftDown(self,event): 
-        if (not self.InitiateScale()) and (not self.InitiateRotation()) :
+        if (not self.InitiateScale()) and (not self.InitiateRotation()) and (not self.InitiateShear()) :
             self.InitiateSelecting(event)
             self.InitiateMove()
         self.Canvas.Document.ToolObjects = []
@@ -131,6 +144,27 @@ class Select(EditingTool):
             return True
         return False
     
+    def InitiateShear(self):
+        # get the selected Node from the toolObjects
+        underMouse = self.Canvas.Document.GetUnderPixel(self.Canvas.Document.Mouse,
+                                                        objects=self.Canvas.Document.ToolObjects[1:])
+        # if something selected set the selected (to enable dragging)
+        if underMouse!=None and underMouse in [self.sl,self.sr,self.st,self.sb] :
+            self.ShearStart = self.Canvas.Document.Mouse
+            if underMouse == self.st :
+                self.Shear = self.sb
+            if underMouse == self.sb :
+                self.Shear = self.st
+            if underMouse == self.sl :
+                self.Shear = self.sr
+            if underMouse == self.sr :
+                self.Shear = self.sl
+            
+            self.Canvas.Document.ToolObjects = []
+            self.Canvas.Refresh()
+            return True
+        return False
+    
     def InitiateSelecting(self, event):
         selected = self.Canvas.Document.GetUnderPixel(self.Canvas.Document.Mouse)
         # check if there is something selected
@@ -172,6 +206,8 @@ class Select(EditingTool):
                 self.ScaleAction(event)
             elif self.Rotate :
                 self.RotateAction(event)
+            elif self.Shear :
+                self.ShearAction(event)
             
             self.Canvas.Refresh() #refresh the canvas for each move
         EditingTool.OnMouseMove(self, event)
@@ -274,7 +310,23 @@ class Select(EditingTool):
                                 pair[1] = x*sin+y*cos+self.RotationOrigin[1] 
                    
                 self.CurrentAngle = currentAngle
-                   
+    
+    def ShearAction(self, event):
+        delta = [self.Canvas.Document.Mouse[0]-self.ShearStart[0],
+                     self.Canvas.Document.Mouse[1]-self.ShearStart[1]]
+            
+        if self.Shear==self.st or self.Shear==self.sb :
+            oy = self.Shear.Path.Points[0][1][1]
+            for obj in self.Canvas.Document.SelectedObjects:
+                for points in obj.Path.Points:
+                    if points[0]!=None :
+                        points[0][0] = points[0][0]-delta[0]*(points[0][1]-oy)
+                    points[1][0] = delta[0]*(points[1][1]-oy)
+                    if points[2]!=None :
+                        points[2][0] = delta[0]*(points[2][1]-oy)
+                        
+        self.ShearStart = self.Canvas.Document.Mouse
+                       
     def OnMouseLeftUp(self, event):
         
         self.startPosition = None
@@ -285,6 +337,8 @@ class Select(EditingTool):
         self.Rotate = False
         self.RotationOrigin = None
         self.CurrentAngle = None
+        
+        self.Shear = False
         
         self.Highlight()
         EditingTool.OnMouseLeftUp(self, event)
@@ -307,6 +361,8 @@ class Select(EditingTool):
             for SelectedObject in self.Canvas.Document.SelectedObjects:
                 self.Canvas.Document.Objects.remove(SelectedObject)
             del self.Canvas.Document.SelectedObjects[:]
+            
+            wx.GetApp().Frame.Properties.Refresh(self.Canvas)
         
         self.Highlight()
         EditingTool.OnKeyDown(self, event)    
