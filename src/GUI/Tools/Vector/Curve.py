@@ -103,3 +103,12 @@ class Curve(VectorTool):
             self.Canvas.Document.ToolObjects = []
             self.Canvas.Refresh()
             
+        elif keycode == wx.WXK_DELETE or keycode == wx.WXK_NUMPAD_DELETE and self.Started:
+            del self.Canvas.Document.Objects[-1].Path.Points[-2]
+            del self.Canvas.Document.ToolObjects[-2]
+            if len(self.Canvas.Document.Objects[-1].Path.Points)==1 :
+                self.Canvas.Document.ToolObjects = []
+                self.Started = False
+                
+            self.Canvas.Refresh()
+            
