@@ -85,6 +85,12 @@ class Tool():
                         'Current Position:'+str(self.Canvas.Document.Mouse)+
                         ', Zoom : '+str(self.Canvas.Document.Zoom*100)+'%'
                         )
+        undermouse = self.Canvas.Document.GetUnderPixel(self.Canvas.Document.Mouse,
+                                                        objects=self.Canvas.Document.ToolObjects)
+        if( undermouse!=None and undermouse.__class__.__name__!='rect' ):
+            self.Canvas.SetCursor(wx.StockCursor(wx.CURSOR_HAND))
+        else:
+            self.Canvas.SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
         event.Skip()
     
     def OnKeyDown(self,event):

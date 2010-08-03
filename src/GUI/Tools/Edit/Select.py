@@ -208,8 +208,8 @@ class Select(EditingTool):
                 self.RotateAction(event)
             elif self.Shear :
                 self.ShearAction(event)
-            
             self.Canvas.Refresh() #refresh the canvas for each move
+            
         EditingTool.OnMouseMove(self, event)
     
     def MoveAction(self, event):
