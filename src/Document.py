@@ -15,7 +15,21 @@ class Path:
     def __init__(self):
         self.Points = []
         self.Closed = False
+       
+    def Clone(self):
+        newpath = Path()
+        for point in self.Points:
+            newpoint = []
+            for pair in point:
+                if pair==None:
+                    newpoint.append(None)
+                else:
+                    newpoint.append(pair[:])
+            newpath.Points.append(newpoint)
         
+        newpath.Closed = self.Closed
+        return newpath
+         
     def Apply(self, context ):
         
         context.new_path()
@@ -67,6 +81,16 @@ class Stroke:
         self.Cap = cairo.LINE_CAP_BUTT
         self.Join = cairo.LINE_JOIN_MITER
         self.Color = (0,0,0,1)
+    
+    def Clone(self):
+        newStroke = Stroke()
+        newStroke.Width = self.Width
+        newStroke.Dash = self.Dash[:]
+        newStroke.DashOffset = self.DashOffset
+        newStroke.Cap = self.Cap
+        newStroke.Join = self.Join
+        newStroke.Color = tuple(self.Color[:])
+        return newStroke
         
     def Apply(self, context, preserve=True ):
         context.set_line_width( self.Width )
@@ -92,6 +116,12 @@ class Fill:
         self.Rule = cairo.FILL_RULE_WINDING
         self.Color = (1,1,1,1)
         
+    def Clone(self):
+        newFill = Fill()
+        newFill.Rule = self.Rule
+        newFill.Color = tuple(self.Color[:])
+        return newFill
+    
     def Apply(self, context, preserve=True ):
         context.set_fill_rule(self.Rule)
         context.set_source_rgba(self.Color[0],self.Color[1],self.Color[2],self.Color[3])
@@ -122,6 +152,15 @@ class Object:
         self.Visible = True
         self.Locked = False
         
+    def Clone(self):
+        newObject = Object()
+        newObject.Path = self.Path.Clone()
+        newObject.Stroke = self.Stroke.Clone()
+        newObject.Antialias = self.Antialias
+        newObject.Fill = self.Fill.Clone()
+        newObject.Visible = self.Visible
+        newObject.Locked = self.Locked
+        return newObject
     
     def Apply(self, context):
         if self.Visible :
@@ -145,6 +184,19 @@ class Rectangle(Object):
         Object.__init__(self)
         self.Path.add1(x, y)
         self.Path.add1(x+w, y+h)
+        
+    def Clone(self):
+        newRect = Rectangle()
+        newObj = Object.Clone(self)
+        
+        newRect.Path = newObj.Path
+        newRect.Stroke = newObj.Stroke
+        newRect.Antialias = newObj.Antialias
+        newRect.Fill = newObj.Fill
+        newRect.Visible = newObj.Visible
+        newRect.Locked = newObj.Locked
+        return newRect
+        
     def Apply(self,ctx):
         ctx.new_path()
         ctx.set_antialias(self.Antialias)
@@ -160,6 +212,18 @@ class ControlPoint(Object):
         self.Path.add1(x,y)
         self.Antialias = cairo.ANTIALIAS_NONE
         
+    def Clone(self):
+        newPoint = Rectangle()
+        newObj = Object.Clone(self)
+        
+        newPoint.Path = newObj.Path
+        newPoint.Stroke = newObj.Stroke
+        newPoint.Antialias = newObj.Antialias
+        newPoint.Fill = newObj.Fill
+        newPoint.Visible = newObj.Visible
+        newPoint.Locked = newObj.Locked
+        return newPoint
+    
     def Apply(self,ctx):
         ctx.new_path()
         ctx.set_antialias(self.Antialias)
@@ -181,7 +245,15 @@ class MetaData:
         self.Created = ''
         self.Modified = ''
         self.Comment = ''
-        
+       
+    def Clone(self):
+        newMeta = MetaData()
+        newMeta.Author = self.Author
+        newMeta.Created = self.Created
+        newMeta.Modified = self.Modified
+        newMeta.Comment = self.Comment
+        return newMeta
+     
     def ToData(self): 
         return json.dumps( [self.Author, self.Created, self.Modified, self.Comment], -1)
     
@@ -213,6 +285,18 @@ class Document:
         self.Border = Rectangle(-2,-2,self.Width+2*2,self.Height+2*2)
         self.Border.Stroke.Width = 1
         self.Border.Antialias = cairo.ANTIALIAS_NONE
+    
+    def Clone(self):
+        newDoc = Document(self.Width,self.Height)
+        newDoc.MetaData = self.MetaData.Clone()
+        for i in self.Objects :
+            newDoc.Objects.append(i.Clone())
+            
+        newDoc.Clip = self.Clip[:]
+        newDoc.Antialias = self.Antialias
+        newDoc.Zoom = self.Zoom
+        
+        return newDoc
        
     def GetUnderPixel(self,pixel,returnList=False,objects=None):
         ctx = cairo.Context(cairo.ImageSurface(cairo.FORMAT_ARGB32,0,0))
