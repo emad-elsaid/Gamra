@@ -10,6 +10,7 @@ Created on Jun 14, 2010
 import cairo
 from wx.lib.wxcairo import ContextFromDC
 import json
+import copy
 
 class Path:
     def __init__(self):
@@ -17,18 +18,7 @@ class Path:
         self.Closed = False
        
     def Clone(self):
-        newpath = Path()
-        for point in self.Points:
-            newpoint = []
-            for pair in point:
-                if pair==None:
-                    newpoint.append(None)
-                else:
-                    newpoint.append(pair[:])
-            newpath.Points.append(newpoint)
-        
-        newpath.Closed = self.Closed
-        return newpath
+        return copy.deepcopy(self)
          
     def Apply(self, context ):
         
@@ -83,14 +73,7 @@ class Stroke:
         self.Color = (0,0,0,1)
     
     def Clone(self):
-        newStroke = Stroke()
-        newStroke.Width = self.Width
-        newStroke.Dash = self.Dash[:]
-        newStroke.DashOffset = self.DashOffset
-        newStroke.Cap = self.Cap
-        newStroke.Join = self.Join
-        newStroke.Color = tuple(self.Color[:])
-        return newStroke
+        return copy.deepcopy(self)
         
     def Apply(self, context, preserve=True ):
         context.set_line_width( self.Width )
@@ -117,10 +100,7 @@ class Fill:
         self.Color = (1,1,1,1)
         
     def Clone(self):
-        newFill = Fill()
-        newFill.Rule = self.Rule
-        newFill.Color = tuple(self.Color[:])
-        return newFill
+        return copy.deepcopy(self)
     
     def Apply(self, context, preserve=True ):
         context.set_fill_rule(self.Rule)
@@ -153,14 +133,7 @@ class Object:
         self.Locked = False
         
     def Clone(self):
-        newObject = Object()
-        newObject.Path = self.Path.Clone()
-        newObject.Stroke = self.Stroke.Clone()
-        newObject.Antialias = self.Antialias
-        newObject.Fill = self.Fill.Clone()
-        newObject.Visible = self.Visible
-        newObject.Locked = self.Locked
-        return newObject
+        return copy.deepcopy(self)
     
     def Apply(self, context):
         if self.Visible :
@@ -186,16 +159,7 @@ class Rectangle(Object):
         self.Path.add1(x+w, y+h)
         
     def Clone(self):
-        newRect = Rectangle()
-        newObj = Object.Clone(self)
-        
-        newRect.Path = newObj.Path
-        newRect.Stroke = newObj.Stroke
-        newRect.Antialias = newObj.Antialias
-        newRect.Fill = newObj.Fill
-        newRect.Visible = newObj.Visible
-        newRect.Locked = newObj.Locked
-        return newRect
+        return copy.deepcopy(self)
         
     def Apply(self,ctx):
         ctx.new_path()
@@ -213,16 +177,7 @@ class ControlPoint(Object):
         self.Antialias = cairo.ANTIALIAS_NONE
         
     def Clone(self):
-        newPoint = Rectangle()
-        newObj = Object.Clone(self)
-        
-        newPoint.Path = newObj.Path
-        newPoint.Stroke = newObj.Stroke
-        newPoint.Antialias = newObj.Antialias
-        newPoint.Fill = newObj.Fill
-        newPoint.Visible = newObj.Visible
-        newPoint.Locked = newObj.Locked
-        return newPoint
+        return copy.deepcopy(self)
     
     def Apply(self,ctx):
         ctx.new_path()
@@ -247,12 +202,7 @@ class MetaData:
         self.Comment = ''
        
     def Clone(self):
-        newMeta = MetaData()
-        newMeta.Author = self.Author
-        newMeta.Created = self.Created
-        newMeta.Modified = self.Modified
-        newMeta.Comment = self.Comment
-        return newMeta
+        return copy.deepcopy(self)
      
     def ToData(self): 
         return json.dumps( [self.Author, self.Created, self.Modified, self.Comment], -1)
@@ -287,16 +237,7 @@ class Document:
         self.Border.Antialias = cairo.ANTIALIAS_NONE
     
     def Clone(self):
-        newDoc = Document(self.Width,self.Height)
-        newDoc.MetaData = self.MetaData.Clone()
-        for i in self.Objects :
-            newDoc.Objects.append(i.Clone())
-            
-        newDoc.Clip = self.Clip[:]
-        newDoc.Antialias = self.Antialias
-        newDoc.Zoom = self.Zoom
-        
-        return newDoc
+        return copy.deepcopy(self)
        
     def GetUnderPixel(self,pixel,returnList=False,objects=None):
         ctx = cairo.Context(cairo.ImageSurface(cairo.FORMAT_ARGB32,0,0))
