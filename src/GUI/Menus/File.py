@@ -23,7 +23,7 @@ class File(wx.Menu):
 
     def __init__(self):
         wx.Menu.__init__(self)
-        self.Priority = 0
+        self.Priority = 1000
         self.Label = "File"
         self.Handlers = []
         

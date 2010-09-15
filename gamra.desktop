@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=0.1
+Name=Gamra
+Comment=Gamra Vector Illustrator
+Exec=/usr/share/gamra/launch.sh
+Icon=/usr/share/gamra/data/icons/icon256.png
+Terminal=false
+Type=Application
+Categories=Graphics;VectorGraphics;GTK;
+StartupNotify=true
