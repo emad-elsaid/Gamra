@@ -1,9 +1,7 @@
 h1. Gamra
 
 h2. Description:
-Gamra is a graphics application aim to replace fireworks for both
-linux, windows, 
-the application is a targeting webdesigners 
+Gamra is a graphics application aim to replace fireworks for bothlinux, windows, the application is a targeting webdesigners 
 
 h2. Screenshots:
 !http://img832.imageshack.us/img832/7339/screenshothq.png!
@@ -19,21 +17,11 @@ h2. Requirements:
 * ease of use
 	
 h2. Developers:
-Faculty of computer and informatics students
-Suez canal university, Egypt
-the project is developed as summer training course 2009/2010
+Faculty of computer and informatics studentsSuez canal university, Egypt the project is developed as summer training course 2009/2010
 	
 h2. How to contribute :
-you can fork that repository by clicking the fork button above
-and head to : 
-http://github.com/blazeeboy/Gamra/issues
-you'll find tasks explained, don't worry it's very simple 
-for wxpython and cairo developers.
-you can choose a task and comment that you'll do it,
-when you done send pull request to me (blazeeboy) and i'll review your commit
-and merge it if valid.
+you can fork that repository by clicking the fork button above and head to : 
+http://github.com/blazeeboy/Gamra/issues you'll find tasks explained, don't worry it's very simple  for wxpython and cairo developers. you can choose a task and comment that you'll do it, when you done send pull request to me (blazeeboy) and i'll review your commit and merge it if valid.
 	
 h2. Wanna say i like that project ?
-you can watch the project for "i like that project"
-or you can fork it to say "Go a head guys i love it"
-e-mails and PMs are always welcome to encourage us.  
+you can watch the project for "i like that project" or you can fork it to say "Go a head guys i love it" e-mails and PMs are always welcome to encourage us.  
