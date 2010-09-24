@@ -4,6 +4,9 @@ Description:
 	Gamra is a graphics application aim to replace fireworks for both
 	linux, windows, 
 	the application is a targeting webdesigners 
+
+Screenshots:
+	!http://img832.imageshack.us/img832/7339/screenshothq.png!
 	
 Tools and libraries:
 	Python
