@@ -1,5 +1,5 @@
 h1. Gamra
-======
+
 h2. Description:
 	Gamra is a graphics application aim to replace fireworks for both
 	linux, windows, 
